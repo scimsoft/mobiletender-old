@@ -1,0 +1,241 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+.overlay {
+  background-color: rgba(255, 255, 255, 0.5);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 5000;
+  top: 0;
+  left: 0;
+  float: left;
+  text-align: center;
+  padding-top: 25%;
+}
+
+.btn-round {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+}
+
+.btn-mobilepos:hover {
+  color: #212529;
+  background-color: #f6993f;
+  border-color: #ffc107;
+}
+
+.btn-mobilepos {
+  color: #000000;
+  background-color: #e9c062;
+  border-color: #d39e00;
+}
+
+.btn-mobilepos:focus, .btn-warning.focus {
+  color: #212529;
+  background-color: #e0a800;
+  border-color: #d39e00;
+  box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
+}
+
+.btn-mobilepos.disabled, .btn-warning:disabled {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+.btn-mobilepos:not(:disabled):not(.disabled):active, .btn-warning:not(:disabled):not(.disabled).active,
+.show > .btn-warning.dropdown-toggle {
+  color: #212529;
+  background-color: #d39e00;
+  border-color: #c69500;
+}
+
+.btn-mobilepos:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus,
+.show > .btn-warning.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
+}
+
+.btn-normal {
+  color: #000;
+  background-color: #e9c46a;
+  border-color: #f4a261;
+}
+
+.btn-normal:hover {
+  color: #000;
+  background-color: #f4a261;
+  border-color: #e9c46a;
+}
+
+.btn-normal:focus,
+.btn-normal.focus {
+  color: #000;
+  background-color: #e9c46a;
+  border-color: #f4a261;
+  box-shadow: 0 0 0 0.2rem rgba(231, 111, 81, 0.5);
+}
+
+.btn-normal.disabled,
+.btn-normal:disabled {
+  color: #fff;
+  background-color: #e9c46a;
+  border-color: #e9c46a;
+}
+
+.btn-normal:not(:disabled):not(.disabled):active,
+.btn-normal:not(:disabled):not(.disabled).active,
+.show > .btn-normal.dropdown-toggle {
+  color: #fff;
+  background-color: #e9c46a;
+  border-color: #eac46a;
+}
+
+.btn-normal:not(:disabled):not(.disabled):active:focus,
+.btn-normal:not(:disabled):not(.disabled).active:focus,
+.show > .btn-normal.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(231, 111, 81, 0.5);
+}
+
+
+.btn-tab {
+  box-shadow: 0px 1px 0px 0px #faeea3;
+  background:linear-gradient(to bottom, #fcf7d6 5%, #ffffff 20%);
+  background-color:#ffffff;
+  border-radius:3px;
+  border:1px solid #ffeccf;
+  display:inline-block;
+  cursor:pointer;
+  color:#333333;
+
+
+  /* padding: 6px 6px; */
+  text-decoration:none;
+  text-shadow:0px 1px 0px #fff6b2;
+  
+}
+
+.btn-tab:hover {
+  background:linear-gradient(to bottom, #ffefd4 5%, #fcf7d6 100%);
+  background-color:#ffefd4;
+}
+.btn-tab:active {
+  position:relative;
+  top:1px;
+}
+
+
+
+.btn-tab.disabled,
+.btn-tab:disabled {
+  color: #ddd;
+  background-color: #EEEEEE;
+  border-color: #EEEEEE;
+}
+
+.btn-tab-outline{
+  color: #fff6b2;
+  border-color: #fff6b2;
+}
+.btn-tab-solid{
+  color: #000;
+  background-color:#fff6b2;
+  border-color: #fff6b2;
+}
+.btn-tab-outline:hover{
+  color: #000;
+  background-color:#fff6b2;
+  border-color: #fff6b2;
+}
+
+.productAddonRow:hover {
+  background-color: #fff6b2;
+  border:1px solid #ffeccf;
+  cursor: pointer;
+}
+
+.diagonal-label-text {
+  transform: rotate(80deg);
+  transform-origin: left top 0;
+}
+
+.disabled-image{
+  opacity: 0.5;
+}
+
+.tooltip-inner {
+  background-color: #e9c46a !important;
+  /*!important is not necessary if you place custom.css at the end of your css calls. For the purpose of this demo, it seems to be required in SO snippet*/
+  color: #000;
+}
+.tooltip.arrow{
+  background-color: #e9c46a !important;
+}
+.tooltip.top .tooltip-arrow {
+  border-top-color: #e9c46a;
+}
+
+.tooltip.right .tooltip-arrow {
+  border-right-color: #e9c46a;
+}
+
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #e9c46a;
+}
+
+.tooltip.left .tooltip-arrow {
+  border-left-color: #e9c46a;
+}
+
+.blink_me {
+  animation: glow linear 1s infinite;
+}
+
+@keyframes glow {
+  50% {
+    background-color: #e9c46a;
+  }
+}
+
+.glowbutton{
+
+  -webkit-animation: glowing 500ms 3;
+  -moz-animation: glowing 500ms 3;
+  -o-animation: glowing 500ms 3;
+  animation: glowing 500ms 3;
+}
+@-webkit-keyframes glowing {
+  0% { background-color: #fff6b2; -webkit-box-shadow: 0 0 3px #fff6b2; }
+  50% { background-color: #f4a261; -webkit-box-shadow: 0 0 20px #f4a261; }
+  100% { background-color: #fff6b2; -webkit-box-shadow: 0 0 3px #fff6b2; }
+}
+
+@-moz-keyframes glowing {
+  0% { background-color: #fff6b2; -moz-box-shadow: 0 0 3px #fff6b2; }
+  50% { background-color: #f4a261; -moz-box-shadow: 0 0 20px #f4a261; }
+  100% { background-color: #fff6b2; -moz-box-shadow: 0 0 3px #fff6b2; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: #fff6b2; box-shadow: 0 0 3px #fff6b2; }
+  50% { background-color: #f4a261; box-shadow: 0 0 20px #f4a261; }
+  100% { background-color: #fff6b2; box-shadow: 0 0 3px #fff6b2; }
+}
+
+@keyframes glowing {
+  0% { background-color: #fff6b2; box-shadow: 0 0 3px #fff6b2; }
+  50% { background-color: #f4a261; box-shadow: 0 0 20px #f4a261; }
+  100% { background-color: #fff6b2; box-shadow: 0 0 3px #fff6b2; }
+}
+
+

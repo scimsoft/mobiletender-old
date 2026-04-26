@@ -1,0 +1,69 @@
+# --- Dependencies ---
+/node_modules
+/vendor
+
+# --- Build / runtime artefacts ---
+/public/hot
+/public/build
+/public/storage
+/public/mix-manifest.json
+/public/js/*.map
+/public/css/*.map
+
+# --- Storage / cache (the .gitignore inside each subdir keeps the dir but ignores contents) ---
+/storage/*.key
+/storage/pail
+/storage/phpstan/
+/storage/debugbar/
+/storage/logs/*.log
+/storage/logs/*.gz
+/storage/logs/*.bak
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+.env.backup
+auth.json
+
+# --- Test / lint caches ---
+.phpunit.result.cache
+/.phpunit.cache
+/coverage
+/.php-cs-fixer.cache
+
+# --- Homestead / Vagrant ---
+Homestead.json
+Homestead.yaml
+.vagrant/
+
+# --- Logs ---
+npm-debug.log*
+yarn-error.log
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Editors / IDEs ---
+.idea/
+.vscode/
+.fleet/
+.nova/
+.zed/
+.cursor/
+*.bak
+*.swp
+*.swo
+*~
+\#*\#
+
+# --- Misc ---
+/tmp/
+/temp/
+*.log

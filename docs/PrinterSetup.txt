@@ -1,0 +1,31 @@
+XPrinter xp-n160ii
+SET IP (fuera del dhcp rango) and Internet connection with USB cable
+
+https://www.xprintertech.com/xprinter-application
+
+
+Wifi setup tools
+http://www.hi-flying.com/download-center-1/applications-1/download-item-wifi-config-tools-v1-0
+
+use el APP Android
+
+0.
+
+AP+NETP=TCP,CLIENT,port,ip
+
+1. Set DHCP
+AP+WANN=DHCP
+
+2. Set NEtwork
+AT+WSSSID=horecalo
+3. set Password
+AT+WSKEY=WPA2PSK,AES,<PASSWORD>
+4. set return to AP after no connect
+AT+MDCH=on
+
+
+
+
+
+Manual
+http://www.image.micros.com.pl/_dane_techniczne_auto/rf%20hf-lpt230-1.pdf

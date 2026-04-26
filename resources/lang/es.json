@@ -1,0 +1,81 @@
+{
+    "Gestiona su local": "",
+
+    "Marcar Entradad o Salida": "",
+    "Checkin o Checkout": "",
+    " Seleccionar mesa": "",
+    "Seleccionar una mesa para atender": "",
+
+    "MESAS y PRODUCTOS": "",
+    "Mesas y Pedidos": "",
+    "Ver una listado de mesas abiertas": "",
+    "Products": "",
+    "Habilitar y editar productos": "",
+    "Stock": "",
+    "Gestion de Stock": "",
+
+    "CAJA": "",
+    "Cobrar": "",
+    "Cobrar mesas": "",
+    "Movimientos": "",
+    "Entradas y Salidas de la caja": "",
+    "Cerrar caja": "",
+    "Cerrar la Caja": "",
+
+    "ADMIN": "",
+    "Tickets cobrados": "",
+    "Lista de las ultimas 50 tickets cobrados": "",
+    "Categorias (Botones)": "",
+    "Stats": "",
+    "Ver las estadisticas": "",
+
+    "Usuarios": "",
+    "Habilitar y editar Usuarios": "",
+    "Demo config": "",
+    "Editar Config": "",
+
+    "Login": "Entrar",
+    "E-Mail Address": "Direccion de correo ",
+    "Password": "Clave",
+    "Remember Me": "Recuerdame",
+    "Forgot Your Password?": "¿Olvidadste tu contraseña?",
+    "Confirm Password": "Confirmar Contraseña",
+    "Please confirm your password before continuing.": "Por favor confirma la contraseña",
+    "Reset Password": "Resetear Contraseña",
+    "Send Password Reset Link": "Manda correo para resetear contraseña",
+    "Register": "Registerar",
+    "Name": "Nombre",
+    "Verify Your Email Address": "Verificar tu correo electronico",
+    "A fresh verification link has been sent to your email address.": "A fresh verification link has been sent to your email address.",
+    "Before proceeding, please check your email for a verification link.": "Before proceeding, please check your email for a verification link.",
+    "If you did not receive the email": "If you did not receive the email",
+    "click here to request another": "click here to request another",
+
+    "Dashboard": "Dashboard",
+    "You are logged in!": "You are logged in!",
+    "Toggle navigation": "Toggle navigation",
+
+
+    "Area Privada": "Area Privada",
+    "Logout": "Logout",
+    "Home": "Home",
+
+    "Añadir":"Añadir",
+    "+info":"+info",
+    "Alergenicos:":"",
+    "Pulsa aqui para tramitar tu pedido":"",
+
+
+    "Bebidas":"",
+    "Comidas":"",
+    "Tapas":"",
+    "Cockteles":"",
+    "Hamacas":"",
+    "Cafe":"",
+    "Copas":"",
+    "Dulces":"",
+    "Otros":""
+
+
+
+}

@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none !important;
+}
+
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:opacity-50;
+    }
+    .btn-primary {
+        @apply btn bg-brand text-slate-900 shadow hover:bg-brand-dark;
+    }
+    .btn-secondary {
+        @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+    }
+    .btn-danger {
+        @apply btn bg-red-600 text-white hover:bg-red-700;
+    }
+    .btn-tab {
+        @apply inline-flex cursor-pointer items-center rounded border border-amber-100 bg-gradient-to-b from-amber-50 to-white px-3 py-1.5 text-sm text-slate-800 shadow-sm hover:from-amber-100 hover:to-amber-50;
+    }
+    .btn-pay {
+        @apply btn w-full bg-brand px-4 py-3 text-base font-semibold text-slate-900 shadow hover:bg-brand-dark sm:max-w-md;
+    }
+    .btn-mobilepos {
+        @apply rounded border border-amber-600 bg-amber-200 px-3 py-2 text-slate-900 hover:bg-amber-300;
+    }
+    .chip {
+        @apply shrink-0 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm text-slate-700 transition hover:bg-slate-50;
+    }
+    .chip-active {
+        @apply border-amber-500 bg-amber-100 text-amber-950 shadow-sm;
+    }
+    .card-tw-product {
+        @apply transition hover:border-slate-300 hover:shadow-md;
+    }
+    .btn-normal {
+        @apply rounded border border-orange-300 bg-amber-200 px-3 py-2 text-slate-900 hover:bg-orange-300;
+    }
+    .card-tw {
+        @apply overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm;
+    }
+    .card-tw-header {
+        @apply border-b border-slate-100 bg-slate-50 px-4 py-3 font-semibold text-slate-800;
+    }
+    .card-tw-body {
+        @apply p-4;
+    }
+    .input-tw {
+        @apply block w-full rounded-lg border-slate-300 shadow-sm focus:border-brand focus:ring-brand sm:text-sm;
+    }
+    .label-tw {
+        @apply mb-1 block text-sm font-medium text-slate-700;
+    }
+    .overlay {
+        @apply fixed inset-0 z-[5000] flex flex-col items-center justify-center bg-white/50 text-center;
+    }
+    .glowbutton {
+        animation: glowing 500ms 3;
+    }
+}
+
+@keyframes glowing {
+    0% {
+        background-color: #fff6b2;
+        box-shadow: 0 0 3px #fff6b2;
+    }
+    50% {
+        background-color: #f4a261;
+        box-shadow: 0 0 20px #f4a261;
+    }
+    100% {
+        background-color: #fff6b2;
+        box-shadow: 0 0 3px #fff6b2;
+    }
+}

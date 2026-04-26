@@ -1,0 +1,40 @@
+.btn-normal {
+    color: #000;
+    background-color: #e9c46a;
+    border-color: #f4a261;
+}
+
+.btn-normal:hover {
+    color: #000;
+    background-color: #f4a261;
+    border-color: #e9c46a;
+}
+
+.btn-normal:focus,
+.btn-normal.focus {
+    color: #000;
+    background-color: #e9c46a;
+    border-color: #f4a261;
+    box-shadow: 0 0 0 0.2rem rgba(231, 111, 81, 0.5);
+}
+
+.btn-normal.disabled,
+.btn-normal:disabled {
+    color: #fff;
+    background-color: #e9c46a;
+    border-color: #e9c46a;
+}
+
+.btn-normal:not(:disabled):not(.disabled):active,
+.btn-normal:not(:disabled):not(.disabled).active,
+.show > .btn-normal.dropdown-toggle {
+    color: #fff;
+    background-color: #e9c46a;
+    border-color: #eac46a;
+}
+
+.btn-normal:not(:disabled):not(.disabled):active:focus,
+.btn-normal:not(:disabled):not(.disabled).active:focus,
+.show > .btn-normal.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(231, 111, 81, 0.5);
+}

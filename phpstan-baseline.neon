@@ -1,0 +1,681 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash\\.$#"
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontReport is not covariant with PHPDoc type array\\<int, class\\-string\\<Throwable\\>\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontReport\\.$#"
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Controllers\\\\Admin\\\\AdminHomeController\\:\\:\\$footer\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminHomeController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UnicentaModels\\\\SharedTicketLines\\:\\:\\$product\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminHomeController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 2
+			path: app/Http/Controllers/Admin/AdminHomeController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminHomeController.php
+
+		-
+			message: "#^Call to function compact\\(\\) contains possibly undefined variable \\$openTicketSum\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminHomeController.php
+
+		-
+			message: "#^Call to function compact\\(\\) contains possibly undefined variable \\$ticketWithUnorderdItems\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminHomeController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 2
+			path: app/Http/Controllers/Admin/AdminOrderController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:findOrFail\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/Admin/AdminOrderController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UnicentaModels\\\\SharedTicketLines\\:\\:\\$product\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 2
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$payment\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$submit\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$tableId\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$total\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Binary operation \"\\-\" between 0 and \\(array\\<int, string\\>\\|string\\) results in an error\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Call to function compact\\(\\) contains possibly undefined variable \\$ticketWithUnorderdItems\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminPaymentController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$paymenttype\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminReceiptController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$ticket_id\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminReceiptController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminReceiptController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Controllers\\\\Admin\\\\AdminStatsController\\:\\:\\$footer\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminStatsController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UnicentaModels\\\\SharedTicketLines\\:\\:\\$product\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminStatsController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 2
+			path: app/Http/Controllers/Admin/AdminStatsController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminStatsController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$product_id\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminStockController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$units\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminStockController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:orderByRaw\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Admin/AdminStockController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UnicentaModels\\\\SharedTicketLines\\:\\:\\$product\\.$#"
+			count: 1
+			path: app/Http/Controllers/BasketController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 4
+			path: app/Http/Controllers/BasketController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/BasketController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\BasketController\\:\\:printOrder\\(\\) invoked with 1 parameter, 2\\-3 required\\.$#"
+			count: 1
+			path: app/Http/Controllers/BasketController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$category_id\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$catorder\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$parentid\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:findOrFail\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:findorfail\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:orderByRaw\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\CategoryController\\:\\:create\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\Factory\\|Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\CategoryController\\:\\:destroy\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\CategoryController\\:\\:edit\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\CategoryController\\:\\:index\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\Factory\\|Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\CategoryController\\:\\:show\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\CategoryController\\:\\:store\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\CategoryController\\:\\:update\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 2
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:isWaiter\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\ProductAdOn\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:ordered\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:where\\(\\)\\.$#"
+			count: 3
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 3
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductAdOnController\\:\\:create\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductAdOnController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductAdOnController\\:\\:destroy\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductAdOnController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductAdOnController\\:\\:edit\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\Factory\\|Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductAdOnController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductAdOnController\\:\\:index\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductAdOnController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductAdOnController\\:\\:show\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductAdOnController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductAdOnController\\:\\:store\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductAdOnController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductAdOnController\\:\\:update\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductAdOnController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\ProductDetail\\:\\:\\$product_id\\.$#"
+			count: 2
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UnicentaModels\\\\Products_Cat\\:\\:\\$product\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$alergen_id\\.$#"
+			count: 4
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$image\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$lang1\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$lang2\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$lang3\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$pricesell\\.$#"
+			count: 2
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$productID\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$product_id\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$stockunits\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Binary operation \"/\" between \\(array\\<int, string\\>\\|string\\) and 1\\.1 results in an error\\.$#"
+			count: 2
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\ProductAdOn\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\ProductAdOn\\:\\:where\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\ProductDetail\\:\\:where\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Category\\:\\:orderByRaw\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 4
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:findOrFail\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:paginate\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:select\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:where\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Products_Cat\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductController\\:\\:create\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\Factory\\|Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductController\\:\\:destroy\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductController\\:\\:edit\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\Factory\\|Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductController\\:\\:index\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductController\\:\\:show\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\Factory\\|Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductController\\:\\:store\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\ProductController\\:\\:update\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$id$#"
+			count: 1
+			path: app/Http/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\UnicentaModels\\\\Product\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/ProductImageController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\TimeReport\\:\\:\\$starttime\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\TimeReport\\:\\:\\$userid\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 4
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:isAdmin\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\TimeReport\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\TimeReport\\:\\:where\\(\\)\\.$#"
+			count: 3
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\TimeReport\\:\\:whereNull\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\TimeReportController\\:\\:create\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\TimeReportController\\:\\:destroy\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\TimeReportController\\:\\:edit\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\TimeReportController\\:\\:index\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Contracts\\\\View\\\\Factory\\|Illuminate\\\\Contracts\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\TimeReportController\\:\\:show\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\TimeReportController\\:\\:store\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\TimeReportController\\:\\:update\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/TimeReportController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 2
+			path: app/Http/Controllers/Unicenta/UnicentaSharedTicketController.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Kernel\\:\\:\\$middleware is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Kernel\\:\\:\\$middleware\\.$#"
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Kernel\\:\\:\\$middlewareGroups is not covariant with PHPDoc type array\\<string, array\\<int, string\\>\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Kernel\\:\\:\\$middlewareGroups\\.$#"
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Kernel\\:\\:\\$routeMiddleware is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Kernel\\:\\:\\$routeMiddleware\\.$#"
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Middleware\\\\Authenticate\\:\\:redirectTo\\(\\) should return string\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Middleware/Authenticate.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\EncryptCookies\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Cookie\\\\Middleware\\\\EncryptCookies\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/EncryptCookies.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:isAdmin\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Middleware/IsAdmin.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:isEmployee\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Middleware/IsEmployee.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:isFinance\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Middleware/IsFinance.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:isManager\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Middleware/IsManager.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:isWaiter\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Middleware/IsWaiter.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\PreventRequestsDuringMaintenance\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\PreventRequestsDuringMaintenance\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/PreventRequestsDuringMaintenance.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\TrimStrings\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TrimStrings\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/TrimStrings.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\VerifyCsrfToken\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\VerifyCsrfToken\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/VerifyCsrfToken.php
+
+		-
+			message: "#^Constructor of class App\\\\Models\\\\UnicentaModels\\\\SharedTicket has an unused parameter \\$attributes\\.$#"
+			count: 1
+			path: app/Models/UnicentaModels/SharedTicket.php
+
+		-
+			message: "#^Used function GuzzleHttp\\\\Psr7\\\\copy_to_string not found\\.$#"
+			count: 1
+			path: app/Models/UnicentaModels/SharedTicket.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Models/UnicentaModels/SharedTicketUser.php
+
+		-
+			message: "#^Constructor of class App\\\\Models\\\\UnicentaModels\\\\SharedTicketUser has an unused parameter \\$attributes\\.$#"
+			count: 1
+			path: app/Models/UnicentaModels/SharedTicketUser.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$type\\.$#"
+			count: 5
+			path: app/Models/User.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\User\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\User\\:\\:\\$hidden is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$hidden\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Providers\\\\AuthServiceProvider\\:\\:\\$policies is not covariant with PHPDoc type array\\<class\\-string, class\\-string\\> of overridden property Illuminate\\\\Foundation\\\\Support\\\\Providers\\\\AuthServiceProvider\\:\\:\\$policies\\.$#"
+			count: 1
+			path: app/Providers/AuthServiceProvider.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Providers\\\\EventServiceProvider\\:\\:\\$listen is not covariant with PHPDoc type array\\<string, array\\<int, string\\>\\> of overridden property Illuminate\\\\Foundation\\\\Support\\\\Providers\\\\EventServiceProvider\\:\\:\\$listen\\.$#"
+			count: 1
+			path: app/Providers/EventServiceProvider.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 1
+			path: app/Providers/RouteServiceProvider.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 1
+			path: app/Providers/RouteServiceProvider.php

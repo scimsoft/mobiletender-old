@@ -1,0 +1,14 @@
+[Unit]
+Description=Playa Alta Node printer bridge (TCP 9100/9101)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/comer/current
+ExecStart=/usr/bin/node /var/www/comer/current/nodeprinterbridge.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
