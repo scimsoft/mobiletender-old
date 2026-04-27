@@ -69,9 +69,18 @@
                 </table>
 
 
-                <div id="paypal-button-container"></div>
-
-
+                <div class="mx-auto max-w-sm space-y-3 pt-2 text-left">
+                    <div id="applepay-container" class="empty:hidden"></div>
+                    <div id="googlepay-container" class="empty:hidden"></div>
+                    <details class="group rounded-lg border border-slate-200 bg-white">
+                        <summary class="cursor-pointer select-none px-4 py-3 text-sm font-medium text-slate-700 marker:hidden">
+                            {{ __('Otras formas de pagar') }}
+                        </summary>
+                        <div class="px-4 pb-4 pt-2">
+                            <div id="paypal-button-container"></div>
+                        </div>
+                    </details>
+                </div>
 
     </div>
 </div>

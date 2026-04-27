@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\AdminStockController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ProductController;
 
 use App\Http\Controllers\ProductImageController;
@@ -75,6 +76,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/checkout/printOrderOnline/{id}', [BasketController::class, 'printOrderOnline']);
     Route::get('/checkout/printOrderPagado/{id}', [BasketController::class, 'printOrderPagado']);
     Route::get('/checkout/printOrderTicket/{id}', [BasketController::class, 'printTicketfromPayment']);
+
+    Route::post('/paypal/create-order', [PayPalController::class, 'createOrder'])->name('paypal.createOrder');
+    Route::post('/paypal/capture-order/{orderId}', [PayPalController::class, 'captureOrder'])
+        ->where('orderId', '[A-Z0-9]+')
+        ->name('paypal.captureOrder');
 
     Route::get('/timereport',[TimeReportController::class,'index'])->middleware('is_employee');
     Route::get('/timereport/enter',[TimeReportController::class,'enter'])->middleware('is_employee');

@@ -1,27 +1,12 @@
 import $ from 'jquery';
-
-function loadPayPalSdk(clientId) {
-    if (window.paypal) {
-        return Promise.resolve();
-    }
-    return new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=EUR`;
-        s.async = true;
-        s.onload = () => resolve();
-        s.onerror = () => reject(new Error('PayPal SDK load failed'));
-        document.head.appendChild(s);
-    });
-}
+import { initPayPalCheckout } from './paypal-checkout.js';
 
 $(function () {
-    const el = document.getElementById('checkout-page-config');
-    if (!el) {
-        return;
-    }
+    const cfgEl = document.getElementById('checkout-page-config');
+    if (!cfgEl) return;
     let cfg;
     try {
-        cfg = JSON.parse(el.textContent);
+        cfg = JSON.parse(cfgEl.textContent);
     } catch (e) {
         return;
     }
@@ -56,44 +41,21 @@ $(function () {
         window.location.href = '/checkout/pickup';
     });
 
-    $('#paypal-button-container').hide();
-
     if (!cfg.paypalPrepay || !cfg.paypalClientId) {
         return;
     }
 
-    loadPayPalSdk(String(cfg.paypalClientId)).then(function () {
-        if (!window.paypal) {
-            return;
-        }
-        window.paypal
-            .Buttons({
-                createOrder: function (_data, actions) {
-                    return actions.order.create({
-                        purchase_units: [
-                            {
-                                amount: {
-                                    value: String(cfg.newLinesTotal),
-                                },
-                            },
-                        ],
-                    });
-                },
-                onApprove: function (_data, actions) {
-                    return actions.order.capture().then(function () {
-                        $('#overlay').fadeOut();
-                        if (cfg.hasTableNumber) {
-                            window.location.href = '/checkout/printOrder/' + ticketId;
-                        } else {
-                            const tn = $('#table_number').val() || '';
-                            window.location.href = '/checkout/confirmForTable/' + tn;
-                        }
-                    });
-                },
-                onCancel: function () {
-                    $('#overlay').fadeOut();
-                },
-            })
-            .render('#paypal-button-container');
+    const onApproveUrl = cfg.hasTableNumber
+        ? '/checkout/printOrder/' + ticketId
+        : '/checkout/confirmForTable/' + (document.getElementById('table_number')?.value || '');
+
+    initPayPalCheckout({
+        clientId: cfg.paypalClientId,
+        amount: cfg.newLinesTotal,
+        context: 'checkout',
+        onApproveUrl,
+        applePayContainer: document.getElementById('applepay-container'),
+        googlePayContainer: document.getElementById('googlepay-container'),
+        paypalContainer: document.getElementById('paypal-button-container'),
     });
 });
