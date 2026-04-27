@@ -42,7 +42,6 @@ function loadPayPalSdk(clientId) {
         'client-id': clientId,
         'currency': 'EUR',
         'components': 'buttons,applepay,googlepay',
-        'enable-funding': 'applepay,googlepay',
     });
     sdkPromise = loadScript(`${SDK_BASE}?${params.toString()}`).then(() => window.paypal);
     return sdkPromise;
