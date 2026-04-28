@@ -108,25 +108,4 @@
     <a href="{{ route('offers.index') }}" class="btn btn-tab">Cancelar</a>
 </div>
 
-@section('scripts')
-<script>
-    jQuery(document).ready(function () {
-        $('#add-offer-row').on('click', function () {
-            var $template = $('#offer-products-table tbody tr').first().clone();
-            $template.find('select').val('');
-            $template.find('input[type="number"]').val(1);
-            $('#offer-products-table tbody').append($template);
-        });
-
-        $('#offer-products-table').on('click', '.remove-offer-row', function () {
-            var $rows = $('#offer-products-table tbody tr');
-            if ($rows.length > 1) {
-                $(this).closest('tr').remove();
-            } else {
-                $(this).closest('tr').find('select').val('');
-                $(this).closest('tr').find('input[type="number"]').val(1);
-            }
-        });
-    });
-</script>
-@stop
+{{-- Add/remove row behavior is wired up in resources/js/admin/offer-edit.js --}}

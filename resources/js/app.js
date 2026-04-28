@@ -37,3 +37,6 @@ $(function () {
 
 // Order helpers (addProduct, moveImage, cancelProduct) are in resources/js/main.js (shop bundle).
 
+// Admin pages still served from layouts.reg (legacy Bootstrap layout).
+import './admin/offer-edit.js';
+

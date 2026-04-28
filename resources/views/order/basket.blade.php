@@ -39,14 +39,31 @@
             @else
                 <ul role="list" class="divide-y divide-slate-100">
                     @foreach ($groupedLines as $group)
+                        @php
+                            $isOfferAdjustment = Illuminate\Support\Str::startsWith(
+                                Illuminate\Support\Str::lower((string) $group->productid),
+                                'offer-'
+                            );
+                        @endphp
                         <li class="flex flex-wrap items-center gap-3 p-3 sm:gap-4">
-                            <img
-                                src="/dbimage/{{ $group->productid }}.png"
-                                class="h-14 w-14 shrink-0 rounded-lg object-cover"
-                                width="56"
-                                height="56"
-                                alt=""
-                            />
+                            @if ($isOfferAdjustment)
+                                <div
+                                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+                                    aria-hidden="true"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7">
+                                        <path fill-rule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.401a18.97 18.97 0 0 0 5.441-5.44c.785-1.158.52-2.629-.401-3.548l-9.58-9.581A3 3 0 0 0 9.568 2.25H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            @else
+                                <img
+                                    src="/dbimage/{{ $group->productid }}.png"
+                                    class="h-14 w-14 shrink-0 rounded-lg object-cover"
+                                    width="56"
+                                    height="56"
+                                    alt=""
+                                />
+                            @endif
                             <div class="min-w-0 flex-1 text-left">
                                 <p class="font-medium text-slate-900">{{ $group->name }}</p>
                                 <p class="text-sm text-slate-500">

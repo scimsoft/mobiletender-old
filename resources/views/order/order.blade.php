@@ -13,31 +13,35 @@
 @endphp
 
 @section('content')
-    <div class="card-tw mx-auto max-w-5xl">
-        <div class="card-tw-body">
-            <nav
-                class="-mx-1 mb-4 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible"
-                aria-label="{{ __('Categorías') }}"
-            >
+    <div class="mx-auto max-w-5xl space-y-4">
+        <nav
+            class="-mx-3 overflow-x-auto border-y border-slate-100 bg-white px-3 py-3 shadow-sm sm:mx-0 sm:rounded-xl sm:border"
+            aria-label="{{ __('Categorías') }}"
+            style="scrollbar-width: none;"
+        >
+            <div class="flex min-w-max gap-2">
+                <a
+                    href="{{ route('order.offers') }}"
+                    class="inline-flex shrink-0 items-center rounded-full border border-amber-300 bg-amber-400 px-4 py-2 text-sm font-semibold text-amber-950 shadow-sm no-underline hover:bg-amber-300"
+                >
+                    {{ __('Ofertas') }}
+                </a>
                 @foreach ($categoryChips as $cat)
                     <a
                         href="/order/category/{{ $cat->id }}"
                         @class([
-                            'chip',
-                            'chip-active' => (string) $cat->id === (string) $activeCategoryId,
+                            'inline-flex shrink-0 items-center rounded-full border px-4 py-2 text-sm font-medium no-underline shadow-sm',
+                            'border-amber-400 bg-amber-100 text-amber-950' => (string) $cat->id === (string) $activeCategoryId,
+                            'border-slate-200 bg-white text-slate-700 hover:bg-slate-50' => (string) $cat->id !== (string) $activeCategoryId,
                         ])
                         @if ((string) $cat->id === (string) $activeCategoryId) aria-current="page" @endif
                     >{{ __($cat->name) }}</a>
                 @endforeach
-            </nav>
-
-            <div class="mb-4 flex justify-end">
-                <a href="{{ route('order.offers') }}"
-                   class="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-amber-900 shadow-sm transition hover:bg-amber-300">
-                    {{ __('Ofertas') }}
-                </a>
             </div>
+        </nav>
 
+        <div class="card-tw">
+            <div class="card-tw-body">
             @if ($productRows->isEmpty())
                 <div class="py-12 text-center text-slate-500" role="status">
                     {{ __('No hay productos en esta categoría.') }}
@@ -85,6 +89,7 @@
 
             <div class="mt-6 flex justify-center">
                 {{ $products->links() }}
+            </div>
             </div>
         </div>
     </div>
