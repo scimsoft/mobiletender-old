@@ -41,14 +41,16 @@ host('playaalta')
     ->setHostname('comer.playaalta.com')
     ->set('deploy_path', '/var/www/comer');
 
-// Test environment on the same server, separate directory + subdomain.
-// Point test.playaalta.com (or your test domain) DNS at the same server,
-// add an nginx vhost for /var/www/comer-test/current/public, then:
+// Test environment on a dedicated Hetzner VPS (test.playaalta.com).
 //   ./vendor/bin/dep deploy playaalta-test
 host('playaalta-test')
-    ->setHostname('comer.playaalta.com')
+    ->setHostname('test.playaalta.com')
+    ->set('remote_user', 'gerrit')
     ->set('deploy_path', '/var/www/comer-test')
-    ->set('branch', 'main');
+    ->set('branch', 'main')
+    ->set('keep_releases', 3)
+    ->set('bin/php', '/usr/bin/php8.4')
+    ->set('php_fpm_service', 'php8.4-fpm.service');
 
 host('copas')
     ->setHostname('copas.playaalta.com')
@@ -76,9 +78,23 @@ task('build:assets', function () {
     run('cd {{release_path}} && npm ci --no-audit --no-fund && npm run build');
 });
 
+// Reload PHP-FPM after deploy so OPcache picks up the new release path.
+// Only runs on hosts that declare a `php_fpm_service` variable.
+// Requires the deploy user to have NOPASSWD sudo for that exact command.
+task('php-fpm:reload', function () {
+    $service = get('php_fpm_service', '');
+    if ($service === '') {
+        return;
+    }
+    run("sudo /bin/systemctl reload {$service}");
+});
+
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
 // Migrate database and build assets before symlink swap.
 before('deploy:symlink', 'artisan:migrate');
 before('deploy:symlink', 'build:assets');
+
+// After the symlink swap, reload PHP-FPM so the new release is served immediately.
+after('deploy:symlink', 'php-fpm:reload');
