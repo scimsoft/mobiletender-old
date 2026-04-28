@@ -117,6 +117,13 @@
                             <span class="mt-4 inline-flex text-sm font-medium text-brand-dark group-hover:underline">{{ __('Abrir') }} →</span>
                         </div>
                     </a>
+                    <a href="{{ url('/offers') }}" class="card-tw group transition hover:shadow-md">
+                        <div class="card-tw-body">
+                            <p class="font-semibold text-slate-900">{{ __('Ofertas') }}</p>
+                            <p class="mt-1 text-sm text-slate-600">{{ __('Crear paquetes de productos a precio fijo') }}</p>
+                            <span class="mt-4 inline-flex text-sm font-medium text-brand-dark group-hover:underline">{{ __('Abrir') }} →</span>
+                        </div>
+                    </a>
                     <a href="{{ url('/stats') }}" class="card-tw group transition hover:shadow-md">
                         <div class="card-tw-body">
                             <p class="font-semibold text-slate-900">{{ __('Stats') }}</p>

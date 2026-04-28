@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminStatsController;
 use App\Http\Controllers\Admin\AdminStockController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BasketController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ProductController;
@@ -120,6 +121,16 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('/categories/setparent',[CategoryController::class,'setParentId'])->middleware('is_manager');
     Route::post('/categories/toggleactive',[CategoryController::class,'toggleActive'])->middleware('is_manager');
+
+    Route::get('/offers', [OfferController::class, 'index'])->middleware('is_manager')->name('offers.index');
+    Route::get('/offers/create', [OfferController::class, 'create'])->middleware('is_manager')->name('offers.create');
+    Route::post('/offers', [OfferController::class, 'store'])->middleware('is_manager')->name('offers.store');
+    Route::get('/offers/{id}/edit', [OfferController::class, 'edit'])->middleware('is_manager')->name('offers.edit');
+    Route::put('/offers/{id}', [OfferController::class, 'update'])->middleware('is_manager')->name('offers.update');
+    Route::delete('/offers/{id}', [OfferController::class, 'destroy'])->middleware('is_manager')->name('offers.destroy');
+
+    Route::get('/order/offers', [OfferController::class, 'showOffersForOrder'])->name('order.offers');
+    Route::get('/order/addoffer/{id}', [OfferController::class, 'addOffer'])->name('order.addoffer');
 
     Route::get('/payments/{id}',[AdminPaymentController::class,'pay'])->middleware('is_manager');
     //Route::get('/payed/{id}/{mode}',[AdminPaymentController::class,'payed'])->middleware('is_manager');

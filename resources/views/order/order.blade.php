@@ -31,6 +31,13 @@
                 @endforeach
             </nav>
 
+            <div class="mb-4 flex justify-end">
+                <a href="{{ route('order.offers') }}"
+                   class="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-amber-900 shadow-sm transition hover:bg-amber-300">
+                    {{ __('Ofertas') }}
+                </a>
+            </div>
+
             @if ($productRows->isEmpty())
                 <div class="py-12 text-center text-slate-500" role="status">
                     {{ __('No hay productos en esta categoría.') }}
