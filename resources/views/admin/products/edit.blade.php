@@ -57,10 +57,22 @@
 
                             <tr>
                                 <td colspan="2">
-                                    <img src="data:image/png;base64,{{$product->image}}">
+                                    @if (! empty($hasImage))
+                                        <img src="{{ url('/dbimage/' . $product->id . '.png') }}?v={{ time() }}"
+                                             alt="{{ $product->name }}"
+                                             class="img-fluid"
+                                             style="max-height: 200px; max-width: 100%;">
+                                    @else
+                                        <img src="{{ asset('img/no-image.png') }}"
+                                             alt="No image"
+                                             class="img-fluid"
+                                             style="max-height: 200px; max-width: 100%; opacity: .6;">
+                                    @endif
                                 </td>
                                 <td>
-                                    <a href="/crop-image/{{$product->id}}" class="btn btn-tab">
+                                    <a href="{{ url('/crop-image/' . $product->id) }}?redirects_to={{ urlencode(route('products.edit', $product->id)) }}"
+                                       class="btn btn-tab js-edit-image"
+                                       data-product-id="{{ $product->id }}">
                                         Edit Image
                                     </a>
                                 </td>
@@ -295,6 +307,30 @@
 
     <script>
         jQuery(document).ready(function () {
+            // Track form dirty state so we can warn the user before they
+            // navigate away (e.g. via "Edit Image") and lose unsaved edits.
+            var formDirty = false;
+            var $productForm = $('form[action="{{ route('products.update', $product->id) }}"]');
+            $productForm.on('change input', ':input', function () {
+                formDirty = true;
+            });
+            $productForm.on('submit', function () {
+                formDirty = false;
+            });
+
+            $('.js-edit-image').on('click', function (e) {
+                if (formDirty) {
+                    var ok = window.confirm(
+                        'You have unsaved changes that will be lost if you continue. ' +
+                        'Click OK to discard your changes, or Cancel to stay and save first.'
+                    );
+                    if (!ok) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+            });
+
             $('#products_list').on('change', function () {
                 var selected_product = $(this).val();
                 var price = prompt("Price ?", "0");

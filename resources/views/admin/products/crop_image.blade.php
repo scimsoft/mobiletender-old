@@ -76,8 +76,9 @@
                         success: function (data) {
                             $("#upload-success").html("Images cropped and uploaded successfully.");
                             $("#upload-success").show();
-                            window.location.href = "/products/{{$product->id}}/edit";
-
+                            var params = new URLSearchParams(window.location.search);
+                            var fallback = "/products/{{$product->id}}/edit";
+                            window.location.href = params.get('redirects_to') || fallback;
                         }
                     });
                 });
