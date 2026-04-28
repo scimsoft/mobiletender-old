@@ -1,431 +1,532 @@
 @extends('layouts.reg')
 
+@php
+    /** @var \App\Models\UnicentaModels\Product $product */
+    $allergens = [
+        'alerg_apio'        => ['file' => 'Apio.png',           'label' => 'Apio'],
+        'alerg_crustaceans' => ['file' => 'Crustaceans.png',    'label' => 'Marisco'],
+        'alerg_dairy'       => ['file' => 'DairyProducts.png',  'label' => 'Lácteo'],
+        'alerg_sulphites'   => ['file' => 'DioxideSulphites.png','label' => 'Sulfitos'],
+        'alerg_gluten'      => ['file' => 'Gluten.png',         'label' => 'Gluten'],
+        'alerg_lupins'      => ['file' => 'Lupins.png',         'label' => 'Altramuces'],
+        'alerg_mollusks'    => ['file' => 'Mollusks.png',       'label' => 'Moluscos'],
+        'alerg_egg'         => ['file' => 'Egg.png',            'label' => 'Huevo'],
+        'alerg_mustard'     => ['file' => 'Mustard.png',        'label' => 'Mostaza'],
+        'alerg_peanuts'     => ['file' => 'Peanuts.png',        'label' => 'Cacahuete'],
+        'alerg_peelfruits'  => ['file' => 'PeelFruits.png',     'label' => 'Frutos Secos'],
+        'alerg_sesame'      => ['file' => 'SesameGrains.png',   'label' => 'Sésamo'],
+        'alerg_soy'         => ['file' => 'Soy.png',            'label' => 'Soja'],
+        'alerg_fish'        => ['file' => 'Fish.png',           'label' => 'Pescado'],
+    ];
+    $detail = $product->product_detail;
+    $translationLanguages = $translationLanguages ?? [];
+@endphp
+
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="container py-3">
 
-            <div class="card">
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    @if (session('success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    @if ($errors->any())
-                        <div class="alert alert-danger" role="alert">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                </div>
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">{{ session('status') }}</div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">{{ session('success') }}</div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">
+                <strong>Por favor revisa los siguientes campos:</strong>
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
+        @endif
 
-
-            <div class="card text-center">
-                <div id="ProductName" class="card-header">Product</div>
-
-                <div class="card-body text-center">
-                    @if (session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-
-                    <form action="{{ route('products.update',$product->id) }}" method="POST"
-                          class="form-inline justify-content-center">
-
-                        <input type="hidden" name="redirects_to" value="{{URL::previous()}}">
-                        @method('PATCH')
-                        @csrf
-
-
-                        <table class="table-borderless">
-                            <tr>
-                                <td colspan="3">
-                                    <label for="name" class="form-label"><b>Nombre</b></label>
-                                    <input name="name" class="form-control" type="text" value="{{$product->name}}" style="min-width: 100%">
-
-                                </td>
-                            </tr>
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">Image</h6></td><td><hr></td><td><hr></td></tr>
-
-                            <tr>
-                                <td colspan="2">
-                                    @if (! empty($hasImage))
-                                        <img src="{{ url('/dbimage/' . $product->id . '.png') }}?v={{ time() }}"
-                                             alt="{{ $product->name }}"
-                                             class="img-fluid"
-                                             style="max-height: 200px; max-width: 100%;">
-                                    @else
-                                        <img src="{{ asset('img/no-image.png') }}"
-                                             alt="No image"
-                                             class="img-fluid"
-                                             style="max-height: 200px; max-width: 100%; opacity: .6;">
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ url('/crop-image/' . $product->id) }}?redirects_to={{ urlencode(route('products.edit', $product->id)) }}"
-                                       class="btn btn-tab js-edit-image"
-                                       data-product-id="{{ $product->id }}">
-                                        Edit Image
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">Descripcion</h6></td><td><hr></td><td><hr></td></tr>
-                            <tr>
-                                <td colspan="3">
-                                    <label for="description" class="form-label"><b>Dicripcion</b></label>
-                                    <textarea name="description" class="form-control"
-                                              rows="3" size="12" style="min-width: 100%">{{$product->product_detail->description ?? ''}}</textarea>
-
-                                </td>
-                            </tr>
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">Categoria</h6></td><td><hr></td><td><hr></td></tr>
-
-
-                            <tr>
-
-                                <td colspan="1 ">
-                                    <label for="category" class="label label-default"><b>Categoria</b> </label>
-                                    <select name="category" class="form-control">
-                                        @foreach($categories as $category)
-                                            <option value="{{$category->id}}" {{ ( $category->id == $product->category) ? 'selected' : '' }}>
-                                                {{$category->name}}
-                                            </option>
-
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td colspan="1">
-                                    <label for="printto" class="form-label"><b>Printer Nr</b></label>
-                                    <input name="printto" id="printto" class="form-control" type="text" size="2"
-                                           value="{{ trim((string) ($product->printto ?? '1')) }}">
-
-                                </td>
-                                <td>
-                                    <label for="taxcat" class="form-label"><b>Tipo de IVA</b></label>
-                                    <input name="taxcat" id="taxcat" class="form-control" type="text"
-                                           value="{{ $product->taxcat ?? '001' }}" size="3">
-
-                                </td>
-                            </tr>
-                            <tr>
-
-                            </tr>
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">System data</h6></td><td><hr></td><td><hr></td></tr>
-                        <tr>
-
-                                <td colspan="2">
-                                    <label for="reference" class="label label-default"><b>Referencia</b> </label>
-                                    <input name="reference" class="form-control" type="text"
-                                           value="{{$product->reference}}" readonly>
-                                </td>
-                                <td>
-                                    <label for="code" class="form-label"><b>Codigo</b></label>
-                                    <input name="code" class="form-control" type="text"
-                                           value="{{$product->code}}" readonly>
-
-                                </td>
-                            </tr>
-
-
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">Compra y Venta</h6></td><td><hr></td><td><hr></td></tr>
-
-                            <tr>
-
-                                <td colspan="1">
-                                    <label for="stockunits" class="label label-default"><b>Unidades de stock</b>
-                                    </label>
-                                    <input name="stockunits" class="form-control" type="text" size="3"
-                                           value="{{$product->stockunits}}">
-                                </td>
-
-
-                                <td>
-                                    <label for="pricebuy" class="form-label"><b>Compra (sin IVA)</b> </label>
-                                    <input name="pricebuy" class="form-control" type="text" size="3"
-                                           value="{{$product->pricebuy}}">€
-
-                                </td>
-                                <td>
-                                    <label for="pricesell" class="form-label"><b>Venta (con IVA)</b></label>
-                                    <input name="pricesell" class="form-control" type="text" size="3"
-                                           value="{{($product->pricesell *1.1)}}">€
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><h6 class="inline-flex bg-dark text-white mt-4">Extras a Añadir</h6></td>
-                                <td>
-                                    <hr>
-                                </td>
-                                <td>
-                                    <hr>
-                                </td>
-                            </tr>
-
-
-                            <tr>
-                                <td colspan="3" class="text-left">
-                                    <label for="category_addon" class="form-label"><b>Seleccion de añadidos</b></label>
-                                    <select class="custom-select" name="category_addon" id="category_addon">
-                                        @foreach($categories as $categorie)
-                                            <option value="{{$categorie->id}}">{{$categorie->name}}</option>
-
-                                        @endforeach
-                                    </select></td>
-                            </tr>
-
-                            <tr>
-
-                                <td colspan="2">
-                                    <label for="products_list" class="form-label">Disponibles</label>
-
-                                    <select name="products_list" class="custom-select"
-                                            id="products_list">
-
-
-                                    </select>
-
-                                </td>
-                                <td colspan="1">
-                                    <label for="addon_products_list" class="form-label">Selecionados</label>
-                                    <select name="addon_products_list" class="custom-select"
-                                            id="addon_products_list">
-                                        <option value=""></option>
-                                        @foreach($all_adons as $all_adon)
-
-                                            <option value="{{$all_adon->id}}">{{$all_adon->name}}</option>
-                                        @endforeach
-
-                                    </select>
-
-                                </td>
-                            </tr>
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">Alergenicos</h6></td><td><hr></td><td><hr></td></tr>
-                            <tr>
-                                <td colspan="3">
-                                    <img
-                                            src="/img/allergens/Apio.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Apio" id='alerg_apio' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_apio) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Crustaceans.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Marisco" id='alerg_crustaceans' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_crustaceans) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/DairyProducts.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Lacteo" id='alerg_dairy' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_dairy) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/DioxideSulphites.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Sulphite" id='alerg_sulphites' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_sulphites) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Gluten.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Gluten" id='alerg_gluten' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_gluten) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Lupins.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Altramuces" id='alerg_lupins' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_lupins) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Mollusks.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Moluscos" id='alerg_mollusks' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_mollusks) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Egg.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Huevo" id='alerg_egg' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_egg) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Mustard.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Mostaza" id='alerg_mustard' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_mustard) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Peanuts.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Cacahuete" id='alerg_peanuts' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_peanuts) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/PeelFruits.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Frutos Secos" id='alerg_peelfruits' style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_peelfruits) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/SesameGrains.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Sesamo"id='alerg_sesame'  style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_sesame) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Soy.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Soy"id='alerg_soy'  style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_soy) 1 @else 0.3 @endif;">
-                                    <img
-                                            src="/img/allergens/Fish.png" class="img-fluid toggleAlergen"
-                                            width="32" data-container="body" data-toggle="popover" data-placement="top" data-content="Fish"id='alerg_fish'  style=" opacity:@if($product->product_detail AND $product->product_detail->alerg_fish) 1 @else 0.3 @endif;">
-
-                                </td>
-
-                            </tr>
-
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">Traduciones</h6></td><td><hr></td><td><hr></td></tr>
-                            <tr>
-                                <td colspan="3">
-
-                                    <label for="lang1" class="form-label"><img src="/img/{{array_keys(Config::get('languages'))[1]}}.svg" width="16"><b>Language 1</b></label>
-                                    <input type="text" name="lang1" class="form-control" style="min-width: 100%"  value="{{$product->product_detail->lang1 ?? ''}}">
-                                </td>
-                            </tr><tr>
-                                <td colspan="3">
-
-                                    <label for="lang2" class="form-label"><img src="/img/{{array_keys(Config::get('languages'))[2]}}.svg" width="16"><b>Language 2</b></label>
-                                    <input type="text" name="lang2" class="form-control" style="min-width: 100%" value="{{$product->product_detail->lang2 ?? ''}}">
-                                </td>
-                            </tr><tr>
-                                <td colspan="3">
-
-                                    <label for="lang3" class="form-label" ><img src="/img/{{array_keys(Config::get('languages'))[3]}}.svg" width="16"><b>Language 3</b></label>
-                                    <input type="text" name="lang3" class="form-control" style="min-width: 100%"  value="{{$product->product_detail->lang3 ?? ''}}">
-                                </td>
-                            </tr>
-                            <tr><td><h6 class="inline-flex bg-dark text-white mt-4">Save</h6></td><td><hr></td><td><hr></td></tr>
-
-                            <tr>
-                                <td colspan="3">
-                                    <button type="submit" class="btn btn-tab btn-block">SAVE</button>
-                                </td>
-                            </tr>
-
-                        </table>
-
-
-                        <div>
-                            <div class="" id="ProductPrice" >
-                            </div>
-                        </div>
-
-                    </form>
-
-                </div>
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div>
+                <a href="{{ url('/products/index') }}" class="btn btn-link p-0 text-decoration-none">
+                    &larr; Volver a productos
+                </a>
+                <h2 class="h4 mb-0 mt-1" id="ProductName">{{ $product->name ?: 'Producto' }}</h2>
             </div>
-
+            <nav aria-label="Secciones del producto" class="d-none d-md-block">
+                <ul class="nav nav-pills small">
+                    <li class="nav-item"><a class="nav-link py-1 px-2" href="#section-general">General</a></li>
+                    <li class="nav-item"><a class="nav-link py-1 px-2" href="#section-image">Imagen</a></li>
+                    <li class="nav-item"><a class="nav-link py-1 px-2" href="#section-pricing">Precio</a></li>
+                    <li class="nav-item"><a class="nav-link py-1 px-2" href="#section-extras">Extras</a></li>
+                    <li class="nav-item"><a class="nav-link py-1 px-2" href="#section-allergens">Alérgenos</a></li>
+                    <li class="nav-item"><a class="nav-link py-1 px-2" href="#section-translations">Traducciones</a></li>
+                </ul>
+            </nav>
         </div>
 
+        <form action="{{ route('products.update', $product->id) }}" method="POST" id="product-form" novalidate>
+            <input type="hidden" name="redirects_to" value="{{ url()->previous() }}">
+            @method('PATCH')
+            @csrf
 
+            {{-- ============================================================
+                 General
+             ============================================================ --}}
+            <fieldset class="card mb-4" id="section-general">
+                <legend class="card-header h6 mb-0">General</legend>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Nombre</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="name" id="name"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   value="{{ old('name', $product->name) }}" required maxlength="255">
+                            @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Descripción</label>
+                        <div class="col-sm-9">
+                            <textarea name="description" id="description" rows="3"
+                                      class="form-control @error('description') is-invalid @enderror">{{ old('description', $detail->description ?? '') }}</textarea>
+                            @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="category" class="col-sm-3 col-form-label">Categoría</label>
+                        <div class="col-sm-9">
+                            <select name="category" id="category"
+                                    class="custom-select @error('category') is-invalid @enderror" required>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        {{ (string) old('category', $product->category) === (string) $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="printto" class="col-sm-3 col-form-label">Impresora</label>
+                        <div class="col-sm-3">
+                            <input type="number" name="printto" id="printto" min="0" step="1" inputmode="numeric"
+                                   class="form-control @error('printto') is-invalid @enderror"
+                                   value="{{ old('printto', trim((string) ($product->printto ?? '1'))) }}">
+                            @error('printto')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <label for="taxcat" class="col-sm-3 col-form-label">Tipo de IVA</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="taxcat" id="taxcat" maxlength="10"
+                                   class="form-control @error('taxcat') is-invalid @enderror"
+                                   value="{{ old('taxcat', $product->taxcat ?? '001') }}" required>
+                            @error('taxcat')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            {{-- ============================================================
+                 Imagen
+             ============================================================ --}}
+            <fieldset class="card mb-4" id="section-image">
+                <legend class="card-header h6 mb-0">Imagen</legend>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-sm-4 text-center mb-3 mb-sm-0">
+                            @if (! empty($hasImage))
+                                <img src="{{ url('/dbimage/' . $product->id . '.png') }}?v={{ time() }}"
+                                     alt="{{ $product->name }}"
+                                     class="img-thumbnail"
+                                     style="max-height: 220px; max-width: 100%;">
+                            @else
+                                <img src="{{ asset('img/no-image.png') }}"
+                                     alt="Sin imagen"
+                                     class="img-thumbnail"
+                                     style="max-height: 220px; max-width: 100%; opacity: .6;">
+                            @endif
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted small mb-2">
+                                Sube y recorta la imagen del producto. Cuadrada (1:1) recomendada.
+                            </p>
+                            <a href="{{ url('/crop-image/' . $product->id) }}?redirects_to={{ urlencode(route('products.edit', $product->id)) }}"
+                               class="btn btn-outline-primary js-edit-image"
+                               data-product-id="{{ $product->id }}">
+                                <i class="fas fa-image"></i> Editar imagen
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            {{-- ============================================================
+                 System data (read-only)
+             ============================================================ --}}
+            <fieldset class="card mb-4">
+                <legend class="card-header h6 mb-0">Datos del sistema</legend>
+                <div class="card-body">
+                    <div class="form-group row mb-0">
+                        <label for="reference" class="col-sm-2 col-form-label">Referencia</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="reference" id="reference" class="form-control-plaintext"
+                                   value="{{ $product->reference }}" readonly>
+                        </div>
+                        <label for="code" class="col-sm-2 col-form-label">Código</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="code" id="code" class="form-control-plaintext"
+                                   value="{{ $product->code }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            {{-- ============================================================
+                 Pricing & stock
+             ============================================================ --}}
+            <fieldset class="card mb-4" id="section-pricing">
+                <legend class="card-header h6 mb-0">Precio y stock</legend>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="stockunits">Unidades de stock</label>
+                            <input type="number" step="0.001" inputmode="decimal" min="0"
+                                   name="stockunits" id="stockunits"
+                                   class="form-control @error('stockunits') is-invalid @enderror"
+                                   value="{{ old('stockunits', $product->stockunits) }}">
+                            @error('stockunits')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="pricebuy">Compra (sin IVA)</label>
+                            <div class="input-group">
+                                <input type="number" step="0.01" inputmode="decimal" min="0"
+                                       name="pricebuy" id="pricebuy"
+                                       class="form-control @error('pricebuy') is-invalid @enderror"
+                                       value="{{ old('pricebuy', $product->pricebuy) }}" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€</span>
+                                </div>
+                                @error('pricebuy')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="pricesell">Venta (con IVA)</label>
+                            <div class="input-group">
+                                <input type="number" step="0.01" inputmode="decimal" min="0"
+                                       name="pricesell" id="pricesell"
+                                       class="form-control @error('pricesell') is-invalid @enderror"
+                                       value="{{ old('pricesell', number_format(((float) $product->pricesell) * 1.1, 2, '.', '')) }}"
+                                       required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€</span>
+                                </div>
+                                @error('pricesell')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            {{-- ============================================================
+                 Extras / addons
+             ============================================================ --}}
+            <fieldset class="card mb-4" id="section-extras">
+                <legend class="card-header h6 mb-0">Extras a añadir</legend>
+                <div class="card-body">
+                    <div class="form-row align-items-end">
+                        <div class="form-group col-md-5">
+                            <label for="category_addon">Categoría</label>
+                            <select class="custom-select" name="category_addon" id="category_addon">
+                                @foreach ($categories as $categorie)
+                                    <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="products_list">Producto disponible</label>
+                            <select name="products_list" class="custom-select" id="products_list">
+                                <option value="">— Selecciona una categoría —</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button type="button" id="add-addon-btn" class="btn btn-outline-primary btn-block">
+                                + Añadir
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <p class="small text-muted mb-2">Seleccionados</p>
+                    <ul class="list-unstyled d-flex flex-wrap" id="addon-chips">
+                        @forelse ($all_adons as $addon)
+                            <li class="mr-2 mb-2">
+                                <span class="badge badge-pill badge-secondary p-2"
+                                      data-addon-id="{{ $addon->id }}">
+                                    {{ $addon->name }}
+                                    <button type="button"
+                                            class="btn btn-sm btn-link text-white p-0 ml-1 remove-addon-btn"
+                                            aria-label="Eliminar {{ $addon->name }}"
+                                            data-addon-id="{{ $addon->id }}">
+                                        &times;
+                                    </button>
+                                </span>
+                            </li>
+                        @empty
+                            <li id="addon-empty" class="text-muted small">Sin extras seleccionados.</li>
+                        @endforelse
+                    </ul>
+                </div>
+            </fieldset>
+
+            {{-- ============================================================
+                 Allergens
+             ============================================================ --}}
+            <fieldset class="card mb-4" id="section-allergens">
+                <legend class="card-header h6 mb-0">Alérgenos</legend>
+                <div class="card-body">
+                    <p class="small text-muted">
+                        Pulsa un alérgeno para activarlo/desactivarlo. Se guarda al instante.
+                    </p>
+                    <div class="d-flex flex-wrap" id="allergen-grid">
+                        @foreach ($allergens as $key => $a)
+                            @php
+                                $active = $detail && $detail->{$key};
+                            @endphp
+                            <button type="button"
+                                    class="btn p-2 m-1 toggleAlergen {{ $active ? 'btn-success' : 'btn-outline-secondary' }}"
+                                    data-toggle="popover"
+                                    data-trigger="hover"
+                                    data-placement="top"
+                                    data-content="{{ $a['label'] }}"
+                                    aria-label="{{ $a['label'] }}"
+                                    aria-pressed="{{ $active ? 'true' : 'false' }}"
+                                    data-active="{{ $active ? '1' : '0' }}"
+                                    data-allergen="{{ $key }}"
+                                    id="{{ $key }}">
+                                <img src="/img/allergens/{{ $a['file'] }}" alt="" width="32" height="32"
+                                     style="filter: {{ $active ? 'none' : 'grayscale(100%)' }};">
+                                <span class="d-block small mt-1">{{ $a['label'] }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            </fieldset>
+
+            {{-- ============================================================
+                 Translations
+             ============================================================ --}}
+            @if (! empty($translationLanguages))
+                <fieldset class="card mb-4" id="section-translations">
+                    <legend class="card-header h6 mb-0">Traducciones</legend>
+                    <div class="card-body">
+                        @foreach (array_values($translationLanguages) as $idx => $langName)
+                            @php
+                                $langKey = array_keys($translationLanguages)[$idx] ?? null;
+                                $field = 'lang' . ($idx + 1);
+                                $flag = $langKey ? "/img/{$langKey}.svg" : null;
+                            @endphp
+                            <div class="form-group row">
+                                <label for="{{ $field }}" class="col-sm-3 col-form-label">
+                                    @if ($flag)
+                                        <img src="{{ $flag }}" alt="" width="16" class="mr-1">
+                                    @endif
+                                    {{ $langName }}
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="{{ $field }}" id="{{ $field }}"
+                                           class="form-control"
+                                           value="{{ old($field, $detail->{$field} ?? '') }}">
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </fieldset>
+            @endif
+
+            {{-- ============================================================
+                 Sticky save bar
+             ============================================================ --}}
+            <div class="d-flex justify-content-between align-items-center sticky-bottom bg-white border-top py-2 mt-3"
+                 style="position: sticky; bottom: 0;">
+                <a href="{{ url('/products/index') }}" class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+                <div>
+                    <span id="save-toast" class="text-success small mr-3" role="status" aria-live="polite"></span>
+                    <button type="submit" class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
 @endsection
+
 @section('scripts')
-
     <script>
-        jQuery(document).ready(function () {
-            // Track form dirty state so we can warn the user before they
-            // navigate away (e.g. via "Edit Image") and lose unsaved edits.
-            var formDirty = false;
-            var $productForm = $('form[action="{{ route('products.update', $product->id) }}"]');
-            $productForm.on('change input', ':input', function () {
-                formDirty = true;
-            });
-            $productForm.on('submit', function () {
-                formDirty = false;
-            });
+        (function ($) {
+            'use strict';
 
-            $('.js-edit-image').on('click', function (e) {
-                if (formDirty) {
-                    var ok = window.confirm(
-                        'You have unsaved changes that will be lost if you continue. ' +
-                        'Click OK to discard your changes, or Cancel to stay and save first.'
-                    );
-                    if (!ok) {
+            var productId = @json($product->id);
+            var formSelector = 'form#product-form';
+
+            function showToast(msg, type) {
+                var $t = $('#save-toast');
+                $t.text(msg).removeClass('text-success text-danger')
+                  .addClass(type === 'error' ? 'text-danger' : 'text-success');
+                if ($t.data('hideTimer')) clearTimeout($t.data('hideTimer'));
+                $t.data('hideTimer', setTimeout(function () { $t.text(''); }, 2500));
+            }
+
+            $(function () {
+                // ---- Dirty form guard for "Edit Image" ----
+                var formDirty = false;
+                var $form = $(formSelector);
+
+                $form.on('change input', ':input', function () { formDirty = true; });
+                $form.on('submit', function () { formDirty = false; });
+
+                $('.js-edit-image').on('click', function (e) {
+                    if (formDirty && !window.confirm(
+                        'Hay cambios sin guardar que se perderán si continúas. ' +
+                        '¿Quieres descartar los cambios?'
+                    )) {
                         e.preventDefault();
-                        return false;
-                    }
-                }
-            });
-
-            $('#products_list').on('change', function () {
-                var selected_product = $(this).val();
-                var price = prompt("Price ?", "0");
-                var productID = $(this).find(":selected").val();
-                var addOnProductID = $(this).find(":selected").text();
-                $("#addon_products_list").append($('<option>', {value: productID, text: addOnProductID}));
-                addOnProduct(productID, price)
-            })
-            $('#addon_products_list').on('change', function () {
-                var selected_product = $(this).val();
-                var productID = $(this).find(":selected").val();
-                var addOnProductID = $(this).find(":selected").text();
-                $(this).find(":selected").remove();
-                removeaddOnProduct(productID)
-            })
-
-            $('#category_addon').on('change', function () {
-                var categoryid = $(this).find(":selected").val();
-                jQuery.ajax({
-                    url: '/products/list/' + categoryid,
-                    type: "GET",
-
-                    dataType: "json",
-                    success: function (data) {
-
-                        var $el = $("#products_list");
-                        $el.empty(); // remove old options
-                        $.each(data, function (id, name) {
-
-                            $el.append($("<option></option>")
-                                .attr("value", name.id).text(name.name));
-
-                        })
-
-
                     }
                 });
 
-            })
-            $('.toggleAlergen').click(function(e){
-                var alergid =  this.id;
-                var opacity = this.style;
-                jQuery.ajax({
-                    url: '/product/alergen',
-                    type: "POST",
-                    data: {product_id: '{{$product->id}}', alergen_id: alergid},
-                    dataType: "json",
-                    success: function (data) {
-
-
-
+                // ---- Smooth scroll for section nav ----
+                $('.nav-pills a[href^="#section-"]').on('click', function (e) {
+                    var target = $(this.getAttribute('href'));
+                    if (target.length) {
+                        e.preventDefault();
+                        $('html, body').animate({ scrollTop: target.offset().top - 70 }, 250);
                     }
                 });
-                if(opacity.opacity == "1"){
-                    opacity.opacity = "0.3"
-                }else{
-                    opacity.opacity = "1"
+
+                // ---- Allergen toggles ----
+                $('#allergen-grid').on('click', '.toggleAlergen', function () {
+                    var $btn = $(this);
+                    var allergen = $btn.data('allergen');
+                    $btn.prop('disabled', true);
+                    $.ajax({
+                        url: '/product/alergen',
+                        type: 'POST',
+                        data: { product_id: productId, alergen_id: allergen },
+                        dataType: 'json'
+                    }).done(function (data) {
+                        var active = !!(data && data.active);
+                        $btn.attr('aria-pressed', active ? 'true' : 'false')
+                            .data('active', active ? 1 : 0)
+                            .toggleClass('btn-success', active)
+                            .toggleClass('btn-outline-secondary', !active);
+                        $btn.find('img').css('filter', active ? 'none' : 'grayscale(100%)');
+                        showToast(active ? 'Alérgeno activado' : 'Alérgeno desactivado');
+                    }).fail(function () {
+                        showToast('No se pudo guardar el alérgeno', 'error');
+                    }).always(function () {
+                        $btn.prop('disabled', false);
+                    });
+                });
+
+                // ---- Addon category change loads available products ----
+                function loadAddonProducts(catId) {
+                    if (!catId) return;
+                    $.ajax({
+                        url: '/products/list/' + catId,
+                        type: 'GET',
+                        dataType: 'json'
+                    }).done(function (data) {
+                        var $sel = $('#products_list').empty();
+                        $sel.append($('<option>', { value: '', text: '— Selecciona un producto —' }));
+                        $.each(data, function (_, item) {
+                            $sel.append($('<option>', { value: item.id, text: item.name }));
+                        });
+                    });
                 }
 
+                $('#category_addon').on('change', function () {
+                    loadAddonProducts($(this).val());
+                });
+                // Load on initial render so the user doesn't have to toggle the
+                // category dropdown twice to see anything.
+                loadAddonProducts($('#category_addon').val());
 
-            })
+                // ---- Add a selected addon as a chip ----
+                $('#add-addon-btn').on('click', function () {
+                    var $sel = $('#products_list');
+                    var addonId = $sel.val();
+                    var addonName = $sel.find('option:selected').text();
+                    if (!addonId) {
+                        showToast('Selecciona un producto', 'error');
+                        return;
+                    }
+                    if ($('#addon-chips [data-addon-id="' + addonId + '"]').length) {
+                        showToast('Ese extra ya está añadido', 'error');
+                        return;
+                    }
+                    var price = window.prompt('Precio del extra (con IVA, en €)', '0');
+                    if (price === null) return;
 
-        })
-        $(function () {
-            $('[data-toggle="popover"]').popover()
-        })
+                    $.ajax({
+                        url: '/addOnProduct/add',
+                        type: 'POST',
+                        data: { product_id: productId, adon_product_id: addonId, price: price },
+                        dataType: 'json'
+                    }).done(function () {
+                        $('#addon-empty').remove();
+                        var $chip = $('<li class="mr-2 mb-2"></li>').append(
+                            $('<span class="badge badge-pill badge-secondary p-2"></span>')
+                                .attr('data-addon-id', addonId)
+                                .text(addonName + ' ')
+                                .append(
+                                    $('<button type="button" class="btn btn-sm btn-link text-white p-0 ml-1 remove-addon-btn">&times;</button>')
+                                        .attr('aria-label', 'Eliminar ' + addonName)
+                                        .attr('data-addon-id', addonId)
+                                )
+                        );
+                        $('#addon-chips').append($chip);
+                        showToast('Extra añadido');
+                    }).fail(function () {
+                        showToast('No se pudo añadir el extra', 'error');
+                    });
+                });
 
-        function addOnProduct(addOnProductID, price) {
-            jQuery.ajax({
-                url: '/addOnProduct/add',
-                type: "POST",
-                data: {product_id: '{{$product->id}}', adon_product_id: addOnProductID, price: price},
-                dataType: "json",
-                success: function (data) {
+                // ---- Remove addon ----
+                $('#addon-chips').on('click', '.remove-addon-btn', function () {
+                    var addonId = $(this).data('addon-id');
+                    var $li = $(this).closest('li');
+                    $.ajax({
+                        url: '/addOnProduct/remove',
+                        type: 'POST',
+                        data: { product_id: productId, adon_product_id: addonId },
+                        dataType: 'json'
+                    }).done(function () {
+                        $li.remove();
+                        if ($('#addon-chips li').length === 0) {
+                            $('#addon-chips').append(
+                                '<li id="addon-empty" class="text-muted small">Sin extras seleccionados.</li>'
+                            );
+                        }
+                        showToast('Extra eliminado');
+                    }).fail(function () {
+                        showToast('No se pudo eliminar el extra', 'error');
+                    });
+                });
 
+                // ---- Bootstrap popovers on the allergen icons ----
+                $('[data-toggle="popover"]').popover();
 
-                }
+                // ---- Browser-level unload guard for any uncaught navigation ----
+                window.addEventListener('beforeunload', function (e) {
+                    if (formDirty) {
+                        e.preventDefault();
+                        e.returnValue = '';
+                    }
+                });
             });
-        }
-
-        function removeaddOnProduct(addOnProductID) {
-            jQuery.ajax({
-                url: '/addOnProduct/remove',
-                type: "POST",
-                data: {product_id: '{{$product->id}}', adon_product_id: addOnProductID},
-                dataType: "json",
-                success: function (data) {
-
-
-                }
-            });
-        }
-
+        })(jQuery);
     </script>
-
-
-
 @stop
