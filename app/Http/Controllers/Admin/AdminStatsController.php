@@ -22,14 +22,18 @@ class AdminStatsController extends Controller
 
     public function index(Request $request)
     {
-        $selectedDate = $request->query('date');
-        $parsedDate = Carbon::createFromFormat('Y-m-d', (string) $selectedDate);
-        if ($parsedDate === false) {
+        $selectedDate = (string) $request->query('date', '');
+        try {
+            $parsedDate = Carbon::createFromFormat('Y-m-d', $selectedDate);
+            if ($parsedDate === false) {
+                $parsedDate = Carbon::today();
+            }
+        } catch (\Throwable $exception) {
             $parsedDate = Carbon::today();
         }
 
         $selectedDate = $parsedDate->toDateString();
-        $selectedCategoryId = (int) $request->query('category');
+        $selectedCategoryId = (string) $request->query('category', '');
         $startOfDay = $parsedDate->copy()->startOfDay()->toDateTimeString();
         $endOfDay = $parsedDate->copy()->endOfDay()->toDateTimeString();
         $historyStartDate = $parsedDate->copy()->subDays(13)->startOfDay()->toDateTimeString();
@@ -81,7 +85,7 @@ GROUP BY daynumber', [$historyStartDate, $endOfDay]);
 
         $selectedCategory = null;
         foreach ($categoriesHoy as $category) {
-            if ((int) $category->ID === $selectedCategoryId) {
+            if ((string) $category->ID === $selectedCategoryId) {
                 $selectedCategory = $category;
                 break;
             }
