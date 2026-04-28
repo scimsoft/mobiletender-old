@@ -9,6 +9,7 @@ use App\Traits\ProductTrait;
 use App\Models\UnicentaModels\Product;
 use App\Models\UnicentaModels\Products_Cat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use function str_replace;
@@ -56,33 +57,31 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $request->validate([
-            'code'=> 'required',
-            'reference'=> 'required',
-            'category'=> 'required',
-            'pricebuy'=> 'required',
-            'pricesell'=> 'required',
-            'name' => 'required',
-
+        $validated = $request->validate([
+            'code'      => 'required|string|max:255',
+            'reference' => 'required|string|max:255',
+            'category'  => 'required|string|max:255',
+            'pricebuy'  => 'required',
+            'pricesell' => 'required',
+            'name'      => 'required|string|max:255',
+            'taxcat'    => 'nullable|string|max:255',
+            'printto'   => 'nullable|string|max:255',
         ]);
 
+        Product::create(Arr::only($validated, [
+            'name', 'pricebuy', 'pricesell', 'code', 'reference', 'taxcat', 'category', 'printto',
+        ]));
 
-        Product::create($request->all());
+        $createdProduct = Product::where('code', $validated['code'])->first();
 
-
-        $code = request()->get('code');
-
-        $createdProduct = Product::where('code', $code)->first();
-
-        $pricesell = str_replace(',','.',$request->pricesell);
-        $createdProduct->pricesell = $pricesell /1.1;
+        $pricesell = str_replace(',', '.', $validated['pricesell']);
+        $createdProduct->pricesell = $pricesell / 1.1;
         $createdProduct->save();
         $product_id = $createdProduct->id;
         $this->addOrDeleteFromCatalog($product_id);
 
-        return redirect()->route('products.edit',$product_id )
-            ->with('success','Product created successfully.');
+        return redirect()->route('products.edit', $product_id)
+            ->with('success', 'Product created successfully.');
     }
 
     /**
@@ -105,24 +104,16 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
-        $product=Product::findOrFail($id);
+        $product = Product::with('product_detail')->findOrFail($id);
 
-        if (!empty($product->image)) {
-            $product->image = base64_encode($product->image);
-        }
+        $addonIds = ProductAdOn::where('product_id', $product->id)->pluck('adon_product_id');
+        $all_adons = $addonIds->isEmpty()
+            ? collect()
+            : Product::whereIn('id', $addonIds)->get();
 
-        $product_addons = ProductAdOn::where('product_id','=',$product->id)->get();
-       // dd($product_addons);
-        $all_adons=[];
-        foreach ($product_addons as $product_addon) {
-            $all_adons[]= Product::find($product_addon->adon_product_id);
-        }
+        $categories = Category::orderBy('name')->get();
 
-        $categories = Category::all();
-
-
-        return view('admin.products.edit',compact('product','all_adons','categories'));
+        return view('admin.products.edit', compact('product', 'all_adons', 'categories'));
     }
 
     /**
@@ -134,40 +125,62 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-
-        $request->validate([
-            'code'=> 'required',
-            'taxcat'=> 'required',
-            'reference'=> 'required',
-            'category'=> 'required',
-            'pricebuy'=> 'required',
-            'pricesell'=> 'required',
-            'name' => 'required',
-
-        ]);
-        Log::debug('product update id:'.$id);
-
-
-        $product=Product::find($id);
-        $request->validate([
-            'name' => 'required',
-            'pricebuy' => 'required',
+        $validated = $request->validate([
+            'code'       => 'required|string|max:255',
+            'taxcat'     => 'required|string|max:255',
+            'reference'  => 'required|string|max:255',
+            'category'   => 'required|string|max:255',
+            'pricebuy'   => 'required',
+            'pricesell'  => 'required',
+            'name'       => 'required|string|max:255',
+            'printto'    => 'nullable|string|max:255',
+            'stockunits' => 'nullable|string|max:255',
         ]);
 
+        Log::debug('product update id:' . $id);
 
-        $product->update($request->all());
-        $pricesell = str_replace(',','.',$request->pricesell);
-        $stockunits = str_replace(',','.',$request->stockunits);
-        $product->pricesell = ($pricesell/1.1);
-        $product->stockunits = $stockunits;
+        $product = Product::findOrFail($id);
+
+        $product->fill(Arr::only($validated, [
+            'name', 'code', 'reference', 'category', 'taxcat', 'pricebuy',
+        ]));
+
+        $product->printto = isset($validated['printto']) ? trim($validated['printto']) : $product->printto;
+
+        $pricesell = str_replace(',', '.', $validated['pricesell']);
+        $product->pricesell = $pricesell / 1.1;
+
+        if (array_key_exists('stockunits', $validated) && $validated['stockunits'] !== null) {
+            $product->stockunits = str_replace(',', '.', $validated['stockunits']);
+        }
+
         $product->save();
-        $this->updateProductDetail($request,$id);
+        $this->updateProductDetail($request, $id);
 
-        $url = $request->only('redirects_to');
+        return $this->safeRedirectBack(
+            $request->input('redirects_to'),
+            route('products.edit', $product->id)
+        )->with('success', 'Product updated successfully');
+    }
 
-        return redirect()->to($url['redirects_to']);
-        //return redirect()->route('products.index')->with('success','Product updated successfully');
+    /**
+     * Validate the supplied "redirects_to" URL is a same-host path before
+     * redirecting. Falls back to $fallback otherwise. Prevents open-redirects.
+     */
+    private function safeRedirectBack(?string $candidate, string $fallback)
+    {
+        if (empty($candidate)) {
+            return redirect()->to($fallback);
+        }
+
+        $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+        $targetHost = parse_url($candidate, PHP_URL_HOST);
+
+        if ($targetHost === null || $targetHost === $appHost) {
+            return redirect()->to($candidate);
+        }
+
+        return redirect()->to($fallback);
     }
 
     private function updateProductDetail(Request $request,$id){
@@ -236,16 +249,32 @@ class ProductController extends Controller
 
     }
 
-    public function addOnProductAdd(){
-        ProductAdOn::create(request()->all());
-        return true;
+    public function addOnProductAdd(Request $request){
+        $validated = $request->validate([
+            'product_id'      => 'required|string|exists:products,id',
+            'adon_product_id' => 'required|string|exists:products,id',
+            'price'           => 'nullable|numeric',
+        ]);
+
+        ProductAdOn::create($validated);
+
+        return response()->json(['status' => true]);
     }
-    public function removeAddOnProductAdd(){
-        $productID = request()->get('product_id');
-        $addonProductID = request()->get('adon_product_id');
-        $product = ProductAdOn::where('product_id',$productID)->where('adon_product_id',$addonProductID)->first();
-        $product->delete();
-        return true;
+    public function removeAddOnProductAdd(Request $request){
+        $validated = $request->validate([
+            'product_id'      => 'required|string|exists:products,id',
+            'adon_product_id' => 'required|string|exists:products,id',
+        ]);
+
+        $row = ProductAdOn::where('product_id', $validated['product_id'])
+            ->where('adon_product_id', $validated['adon_product_id'])
+            ->first();
+
+        if ($row !== null) {
+            $row->delete();
+        }
+
+        return response()->json(['status' => true]);
     }
 
     /**
@@ -269,20 +298,19 @@ class ProductController extends Controller
     }
 
     public function toggleAlergen(Request $request){
-        $productID = request()->get('product_id');
-        $productDetail = ProductDetail::where('product_id',$productID)->first();
-        if(empty($productDetail)){
-            $productDetail = new ProductDetail();
-            $productDetail->product_id = $productID;
-        }
-        if($productDetail->{$request->alergen_id}){
-            $productDetail->{$request->alergen_id} = false;
-        }else{
-            $productDetail->{$request->alergen_id} = true;
-        }
-        $productDetail->save();
-        return $productDetail->{$request->alergen_id};
+        $validated = $request->validate([
+            'product_id' => 'required|string|exists:products,id',
+            'alergen_id' => ['required', 'string', \Illuminate\Validation\Rule::in(ProductDetail::ALLERGEN_KEYS)],
+        ]);
 
+        $productDetail = ProductDetail::firstOrNew(['product_id' => $validated['product_id']]);
+        $productDetail->{$validated['alergen_id']} = ! (bool) $productDetail->{$validated['alergen_id']};
+        $productDetail->save();
+
+        return response()->json([
+            'status' => true,
+            'active' => (bool) $productDetail->{$validated['alergen_id']},
+        ]);
     }
 
 

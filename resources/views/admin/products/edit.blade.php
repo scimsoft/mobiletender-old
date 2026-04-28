@@ -1,31 +1,41 @@
 @extends('layouts.reg')
 
 @section('content')
-    <div id="app">
-        <div class="container">
-            <div class="row justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
 
-                <div class="card">
-
-
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-                        {{--{{dd($products)}}--}}
-
-
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    @if (session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger" role="alert">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </div>
-
-
             </div>
+
+
             <div class="card text-center">
                 <div id="ProductName" class="card-header">Product</div>
 
                 <div class="card-body text-center">
+                    @if (session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
 
                     <form action="{{ route('products.update',$product->id) }}" method="POST"
                           class="form-inline justify-content-center">
@@ -82,13 +92,14 @@
                                 </td>
                                 <td colspan="1">
                                     <label for="printto" class="form-label"><b>Printer Nr</b></label>
-                                    <input name="printto" class="form-control" type="text" size="2"
-                                           value="{{$product->printto ?? '1'}} ">
+                                    <input name="printto" id="printto" class="form-control" type="text" size="2"
+                                           value="{{ trim((string) ($product->printto ?? '1')) }}">
 
                                 </td>
                                 <td>
                                     <label for="taxcat" class="form-label"><b>Tipo de IVA</b></label>
-                                    <input name="taxcat" class="form-control" type="text" value="001" size="2" readonly>
+                                    <input name="taxcat" id="taxcat" class="form-control" type="text"
+                                           value="{{ $product->taxcat ?? '001' }}" size="3">
 
                                 </td>
                             </tr>
@@ -277,7 +288,6 @@
             </div>
 
         </div>
-    </div>
 
 
 @endsection
