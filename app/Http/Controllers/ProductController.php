@@ -105,6 +105,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::with('product_detail')->findOrFail($id);
+        $hasImage = ! empty($product->image);
 
         $addonIds = ProductAdOn::where('product_id', $product->id)->pluck('adon_product_id');
         $all_adons = $addonIds->isEmpty()
@@ -113,7 +114,7 @@ class ProductController extends Controller
 
         $categories = Category::orderBy('name')->get();
 
-        return view('admin.products.edit', compact('product', 'all_adons', 'categories'));
+        return view('admin.products.edit', compact('product', 'all_adons', 'categories', 'hasImage'));
     }
 
     /**
