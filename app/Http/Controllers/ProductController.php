@@ -2,109 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddOnProductRequest;
+use App\Http\Requests\RemoveAddOnProductRequest;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\ToggleAllergenRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Models\ProductAdOn;
 use App\Models\ProductDetail;
 use App\Models\UnicentaModels\Category;
-use App\Models\ProductAdOn;
-use App\Traits\ProductTrait;
 use App\Models\UnicentaModels\Product;
 use App\Models\UnicentaModels\Products_Cat;
+use App\Traits\ProductTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
-use function str_replace;
-use function view;
 
 class ProductController extends Controller
 {
     use ProductTrait;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index($category=null)
+
+    public function index($category = null)
     {
-        //
-        if(empty($category)) {
+        if (empty($category)) {
             $products = Product::paginate(50);
-        }else{
-            $products= $this->getCategoryProducts($category);
-    }
+        } else {
+            $products = $this->getCategoryProducts($category);
+        }
+
         $categories = Category::orderByRaw('CONVERT(catorder, SIGNED)')->get();
 
-        return view('admin.products.index',compact('categories','products'))
+        return view('admin.products.index', compact('categories', 'products'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $this->authorize('create', Product::class);
+
         $categories = Category::all();
-        return view('admin.products.create',compact('categories'));
+        return view('admin.products.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $validated = $request->validate([
-            'code'      => 'required|string|max:255',
-            'reference' => 'required|string|max:255',
-            'category'  => 'required|string|max:255',
-            'pricebuy'  => 'required',
-            'pricesell' => 'required',
-            'name'      => 'required|string|max:255',
-            'taxcat'    => 'nullable|string|max:255',
-            'printto'   => 'nullable|string|max:255',
-        ]);
+        $attrs = $request->productAttributes();
 
-        Product::create(Arr::only($validated, [
-            'name', 'pricebuy', 'pricesell', 'code', 'reference', 'taxcat', 'category', 'printto',
-        ]));
+        $product = Product::create($attrs);
 
-        $createdProduct = Product::where('code', $validated['code'])->first();
+        // The form posts a gross (with-IVA) sell price; convert it back to net
+        // so it matches what the rest of the application stores.
+        $product->price_sell_gross = $request->input('pricesell');
+        $product->save();
 
-        $pricesell = str_replace(',', '.', $validated['pricesell']);
-        $createdProduct->pricesell = $pricesell / 1.1;
-        $createdProduct->save();
-        $product_id = $createdProduct->id;
-        $this->addOrDeleteFromCatalog($product_id);
+        $this->addOrDeleteFromCatalog($product->id);
 
-        return redirect()->route('products.edit', $product_id)
+        return redirect()->route('products.edit', $product->id)
             ->with('success', 'Product created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($product)
     {
-        //
-        return view('products.show',compact('product'));
+        return view('products.show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $product = Product::with('product_detail')->findOrFail($id);
+        $this->authorize('update', $product);
+
         $hasImage = ! empty($product->image);
 
         $addonIds = ProductAdOn::where('product_id', $product->id)->pluck('adon_product_id');
@@ -128,58 +92,36 @@ class ProductController extends Controller
         ));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-        $validated = $request->validate([
-            'code'       => 'required|string|max:255',
-            'taxcat'     => 'required|string|max:255',
-            'reference'  => 'required|string|max:255',
-            'category'   => 'required|string|max:255',
-            'pricebuy'   => 'required',
-            'pricesell'  => 'required',
-            'name'       => 'required|string|max:255',
-            'printto'    => 'nullable|string|max:255',
-            'stockunits' => 'nullable|string|max:255',
-        ]);
-
         Log::debug('product update id:' . $id);
 
         $product = Product::findOrFail($id);
+        $this->authorize('update', $product);
 
-        $product->fill(Arr::only($validated, [
-            'name', 'code', 'reference', 'category', 'taxcat', 'pricebuy',
-        ]));
+        $product->fill($request->productAttributes());
+        $product->printto = trim((string) $request->input('printto', $product->printto));
+        $product->price_sell_gross = $request->input('pricesell');
 
-        $product->printto = isset($validated['printto']) ? trim($validated['printto']) : $product->printto;
-
-        $pricesell = str_replace(',', '.', $validated['pricesell']);
-        $product->pricesell = $pricesell / 1.1;
-
-        if (array_key_exists('stockunits', $validated) && $validated['stockunits'] !== null) {
-            $product->stockunits = str_replace(',', '.', $validated['stockunits']);
+        $stockunits = $request->input('stockunits');
+        if ($stockunits !== null && $stockunits !== '') {
+            $product->stockunits = str_replace(',', '.', $stockunits);
         }
 
         $product->save();
-        $this->updateProductDetail($request, $id);
+        $this->updateProductDetail($request->productDetailAttributes(), $product->id);
 
-        return $this->safeRedirectBack(
+        return $this->safeRedirect(
             $request->input('redirects_to'),
             route('products.edit', $product->id)
         )->with('success', 'Product updated successfully');
     }
 
     /**
-     * Validate the supplied "redirects_to" URL is a same-host path before
-     * redirecting. Falls back to $fallback otherwise. Prevents open-redirects.
+     * Validate the supplied URL is a same-host path before redirecting.
+     * Falls back to $fallback otherwise. Prevents open-redirects.
      */
-    private function safeRedirectBack(?string $candidate, string $fallback)
+    private function safeRedirect(?string $candidate, string $fallback)
     {
         if (empty($candidate)) {
             return redirect()->to($fallback);
@@ -195,45 +137,29 @@ class ProductController extends Controller
         return redirect()->to($fallback);
     }
 
-    private function updateProductDetail(Request $request,$id){
-
-        $productDetail = ProductDetail::where('product_id',$id)->first();
-        if(empty($productDetail)){
-            $productDetail = new ProductDetail();
-            $productDetail->product_id = $id;
-        }
-        $productDetail->description = $request->description;
-        $productDetail->lang1=$request->lang1;
-        $productDetail->lang2=$request->lang2;
-        $productDetail->lang3=$request->lang3;
-        $productDetail->save();
-
-
-
+    private function updateProductDetail(array $attrs, $productId): void
+    {
+        $detail = ProductDetail::firstOrNew(['product_id' => $productId]);
+        $detail->fill($attrs);
+        $detail->save();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
-        $product=Product::findOrFail($id);
+        $product = Product::findOrFail($id);
+        $this->authorize('delete', $product);
+
         $product->product_cat()->delete();
         $product->delete();
 
         return redirect()->route('products.index')
-            ->with('success','Product deleted successfully');
+            ->with('success', 'Product deleted successfully');
     }
 
     public function editImage($id)
     {
-
         $product = Product::find($id);
-        if (!empty($product->image)) {
+        if (! empty($product->image)) {
             $product->image = base64_encode($product->image);
         }
 
@@ -244,46 +170,39 @@ class ProductController extends Controller
     {
         $image_file = $request->image;
         $product = Product::find($request->productID);
-        list($type, $image_file) = explode(';', $image_file);
+        list(, $image_file) = explode(';', $image_file);
         list(, $image_file) = explode(',', $image_file);
         $image_file = base64_decode($image_file);
         $product->image = $image_file;
         $product->save();
         return response()->json(['status' => true]);
     }
-    public function toggleCatalog(Request $request){
+
+    public function toggleCatalog(Request $request)
+    {
         $product_id = $request->product_id;
-        Log::debug('product_id:'.$product_id);
+        Log::debug('product_id:' . $product_id);
 
         $this->addOrDeleteFromCatalog($product_id);
 
-        return "SUCCES";
-
+        return 'SUCCES';
     }
 
-    public function addOnProductAdd(Request $request){
-        $validated = $request->validate([
-            'product_id'      => 'required|string|exists:products,id',
-            'adon_product_id' => 'required|string|exists:products,id',
-            'price'           => 'nullable',
+    public function addOnProductAdd(AddOnProductRequest $request)
+    {
+        ProductAdOn::create([
+            'product_id'      => $request->input('product_id'),
+            'adon_product_id' => $request->input('adon_product_id'),
+            'price'           => $request->priceAsFloat(),
         ]);
-
-        if (isset($validated['price'])) {
-            $validated['price'] = (float) str_replace(',', '.', (string) $validated['price']);
-        }
-
-        ProductAdOn::create($validated);
 
         return response()->json(['status' => true]);
     }
-    public function removeAddOnProductAdd(Request $request){
-        $validated = $request->validate([
-            'product_id'      => 'required|string|exists:products,id',
-            'adon_product_id' => 'required|string|exists:products,id',
-        ]);
 
-        $row = ProductAdOn::where('product_id', $validated['product_id'])
-            ->where('adon_product_id', $validated['adon_product_id'])
+    public function removeAddOnProductAdd(RemoveAddOnProductRequest $request)
+    {
+        $row = ProductAdOn::where('product_id', $request->input('product_id'))
+            ->where('adon_product_id', $request->input('adon_product_id'))
             ->first();
 
         if ($row !== null) {
@@ -293,15 +212,11 @@ class ProductController extends Controller
         return response()->json(['status' => true]);
     }
 
-    /**
-     * @param $product_id
-     */
     private function addOrDeleteFromCatalog($product_id): void
     {
         $productcat = Products_Cat::find($product_id);
         if (empty($productcat)) {
             $cat = new Products_Cat();
-
             $cat->product = $product_id;
             $cat->save();
         } else {
@@ -309,25 +224,21 @@ class ProductController extends Controller
         }
     }
 
-    public function getProductList($id){
-        return Product::select('id','name')->where('category',$id)->get();
+    public function getProductList($id)
+    {
+        return Product::select('id', 'name')->where('category', $id)->get();
     }
 
-    public function toggleAlergen(Request $request){
-        $validated = $request->validate([
-            'product_id' => 'required|string|exists:products,id',
-            'alergen_id' => ['required', 'string', \Illuminate\Validation\Rule::in(ProductDetail::ALLERGEN_KEYS)],
-        ]);
-
-        $productDetail = ProductDetail::firstOrNew(['product_id' => $validated['product_id']]);
-        $productDetail->{$validated['alergen_id']} = ! (bool) $productDetail->{$validated['alergen_id']};
+    public function toggleAlergen(ToggleAllergenRequest $request)
+    {
+        $productDetail = ProductDetail::firstOrNew(['product_id' => $request->input('product_id')]);
+        $key = $request->input('alergen_id');
+        $productDetail->{$key} = ! (bool) $productDetail->{$key};
         $productDetail->save();
 
         return response()->json([
             'status' => true,
-            'active' => (bool) $productDetail->{$validated['alergen_id']},
+            'active' => (bool) $productDetail->{$key},
         ]);
     }
-
-
 }
