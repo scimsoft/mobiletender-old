@@ -114,7 +114,18 @@ class ProductController extends Controller
 
         $categories = Category::orderBy('name')->get();
 
-        return view('admin.products.edit', compact('product', 'all_adons', 'categories', 'hasImage'));
+        $languages = config('languages', []);
+        // Strip the default (first) language and keep the next three —
+        // these correspond to product_details.lang1, lang2, lang3.
+        $translationLanguages = array_slice($languages, 1, 3, true);
+
+        return view('admin.products.edit', compact(
+            'product',
+            'all_adons',
+            'categories',
+            'hasImage',
+            'translationLanguages'
+        ));
     }
 
     /**
@@ -254,8 +265,12 @@ class ProductController extends Controller
         $validated = $request->validate([
             'product_id'      => 'required|string|exists:products,id',
             'adon_product_id' => 'required|string|exists:products,id',
-            'price'           => 'nullable|numeric',
+            'price'           => 'nullable',
         ]);
+
+        if (isset($validated['price'])) {
+            $validated['price'] = (float) str_replace(',', '.', (string) $validated['price']);
+        }
 
         ProductAdOn::create($validated);
 
