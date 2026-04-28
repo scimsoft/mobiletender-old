@@ -61,7 +61,9 @@
                     data: {"image": img, "productID": "{{ $product->id }}"},
                     success: function () {
                         jQuery("#upload-success").html("Images cropped and uploaded successfully.").removeClass('hidden');
-                        window.location.href = "/products/{{ $product->id }}/edit";
+                        var params = new URLSearchParams(window.location.search);
+                        var fallback = "/products/{{ $product->id }}/edit";
+                        window.location.href = params.get('redirects_to') || fallback;
                     }
                 });
             });

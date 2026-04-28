@@ -17,6 +17,7 @@ class ProductDetail extends Model
         'lang1',
         'lang2',
         'lang3',
+        'alerg_apio',
         'alerg_crustaceans',
         'alerg_dairy',
         'alerg_sulphites',
@@ -27,7 +28,26 @@ class ProductDetail extends Model
         'alerg_mustard',
         'alerg_peanuts',
         'alerg_peelfruits',
-        'alerg_sesame'
+        'alerg_sesame',
+        'alerg_soy',
+        'alerg_fish',
+    ];
+
+    public const ALLERGEN_KEYS = [
+        'alerg_apio',
+        'alerg_crustaceans',
+        'alerg_dairy',
+        'alerg_sulphites',
+        'alerg_egg',
+        'alerg_gluten',
+        'alerg_lupins',
+        'alerg_mollusks',
+        'alerg_mustard',
+        'alerg_peanuts',
+        'alerg_peelfruits',
+        'alerg_sesame',
+        'alerg_soy',
+        'alerg_fish',
     ];
 
 
