@@ -14,7 +14,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
         "mike42/escpos-php": "^3.0",
-        "predis/predis": "^2.0"
+        "predis/predis": "^3.4"
     },
     "require-dev": {
         "deployer/deployer": "^7.3",
