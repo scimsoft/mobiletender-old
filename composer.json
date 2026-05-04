@@ -11,7 +11,7 @@
         "php": "^8.4",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.52",
-        "laravel/tinker": "^2.7",
+        "laravel/tinker": "^3.0",
         "laravel/ui": "^4.0",
         "mike42/escpos-php": "^3.0",
         "predis/predis": "^2.0"
