@@ -1,111 +1,120 @@
-<div class="row">
-    <div class="col-md-6">
-        <label class="form-label"><b>Nombre</b></label>
-        <input name="name" class="form-control" type="text"
+<div class="grid gap-4 sm:grid-cols-12">
+    <div class="sm:col-span-6">
+        <label for="offer-name" class="label-tw">{{ __('Nombre') }}</label>
+        <input id="offer-name" name="name" type="text" class="input-tw"
                value="{{ old('name', $offer->name ?? '') }}" required>
     </div>
-    <div class="col-md-3">
-        <label class="form-label"><b>Precio final (con IVA)</b></label>
-        <input name="final_price" class="form-control" type="text"
+    <div class="sm:col-span-3">
+        <label for="offer-final-price" class="label-tw">{{ __('Precio final (con IVA)') }}</label>
+        <input id="offer-final-price" name="final_price" type="text" inputmode="decimal" class="input-tw"
                value="{{ old('final_price', isset($offer) ? number_format($offer->final_price, 2, '.', '') : '') }}"
                required>
     </div>
-    <div class="col-md-2">
-        <label class="form-label"><b>Orden</b></label>
-        <input name="sort_order" class="form-control" type="number"
+    <div class="sm:col-span-2">
+        <label for="offer-sort-order" class="label-tw">{{ __('Orden') }}</label>
+        <input id="offer-sort-order" name="sort_order" type="number" inputmode="numeric" class="input-tw"
                value="{{ old('sort_order', $offer->sort_order ?? 0) }}">
     </div>
-    <div class="col-md-1 d-flex align-items-end">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="active"
-                   id="active"
+    <div class="flex items-end sm:col-span-1">
+        <label class="inline-flex items-center gap-2 text-sm font-medium text-slate-700">
+            <input class="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand"
+                   type="checkbox" name="active" id="active"
                    {{ (isset($offer) ? $offer->active : true) ? 'checked' : '' }}>
-            <label class="form-check-label" for="active"><b>Activa</b></label>
-        </div>
+            <span>{{ __('Activa') }}</span>
+        </label>
     </div>
 </div>
 
-<hr>
+<hr class="my-6 border-slate-200">
 
-<h4>Productos en la oferta</h4>
-<p class="text-muted">
-    Esto es la "mesa virtual" de la oferta. Añade los productos y cantidades.
-    Cuando un cliente pida la oferta, estos productos se moverán a su mesa
-    con un ajuste para que el total sume el precio final indicado.
+<h2 class="text-lg font-semibold text-slate-900">{{ __('Productos en la oferta') }}</h2>
+<p class="mt-1 text-sm text-slate-500">
+    {{ __('Esto es la "mesa virtual" de la oferta. Añade los productos y cantidades. Cuando un cliente pida la oferta, estos productos se moverán a su mesa con un ajuste para que el total sume el precio final indicado.') }}
 </p>
 
-<table class="table table-bordered" id="offer-products-table">
-    <thead>
-        <tr>
-            <th width="60%">Producto</th>
-            <th width="20%">Cantidad</th>
-            <th width="20%">Quitar</th>
-        </tr>
-    </thead>
-    <tbody>
-    @php
-        $existingLines = isset($offer)
-            ? $offer->offerProducts->map(fn ($op) => ['product_id' => $op->product_id, 'quantity' => $op->quantity])->toArray()
-            : [];
-    @endphp
-    @forelse($existingLines as $line)
-        <tr class="offer-product-row">
-            <td>
-                <select name="product_id[]" class="form-control">
-                    <option value="">-- selecciona producto --</option>
-                    @foreach($products as $product)
-                        <option value="{{ $product->id }}"
-                            {{ $line['product_id'] == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }} ({{ number_format($product->pricesell * 1.1, 2) }}€)
-                        </option>
-                    @endforeach
-                </select>
-            </td>
-            <td>
-                <input type="number" name="quantity[]" min="1"
-                       value="{{ $line['quantity'] }}" class="form-control">
-            </td>
-            <td>
-                <button type="button" class="btn btn-tab remove-offer-row">Quitar</button>
-            </td>
-        </tr>
-    @empty
-        <tr class="offer-product-row">
-            <td>
-                <select name="product_id[]" class="form-control">
-                    <option value="">-- selecciona producto --</option>
-                    @foreach($products as $product)
-                        <option value="{{ $product->id }}">
-                            {{ $product->name }} ({{ number_format($product->pricesell * 1.1, 2) }}€)
-                        </option>
-                    @endforeach
-                </select>
-            </td>
-            <td>
-                <input type="number" name="quantity[]" min="1" value="1" class="form-control">
-            </td>
-            <td>
-                <button type="button" class="btn btn-tab remove-offer-row">Quitar</button>
-            </td>
-        </tr>
-    @endforelse
-    </tbody>
-</table>
+<div class="mt-4 overflow-hidden rounded-xl border border-slate-200">
+    <div class="overflow-x-auto">
+        <table class="table-tw" id="offer-products-table">
+            <thead>
+                <tr>
+                    <th class="w-3/5">{{ __('Producto') }}</th>
+                    <th class="w-1/5">{{ __('Cantidad') }}</th>
+                    <th class="w-1/5 text-right">{{ __('Quitar') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $existingLines = isset($offer)
+                        ? $offer->offerProducts->map(fn ($op) => ['product_id' => $op->product_id, 'quantity' => $op->quantity])->toArray()
+                        : [];
+                @endphp
+                @forelse ($existingLines as $line)
+                    <tr class="offer-product-row">
+                        <td>
+                            <select name="product_id[]" class="input-tw">
+                                <option value="">{{ __('-- selecciona producto --') }}</option>
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}" {{ $line['product_id'] == $product->id ? 'selected' : '' }}>
+                                        {{ $product->name }} ({{ number_format($product->pricesell * 1.1, 2) }}€)
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="quantity[]" min="1" inputmode="numeric"
+                                   value="{{ $line['quantity'] }}" class="input-tw">
+                        </td>
+                        <td class="text-right">
+                            <button type="button" class="btn-secondary remove-offer-row text-xs">{{ __('Quitar') }}</button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr class="offer-product-row">
+                        <td>
+                            <select name="product_id[]" class="input-tw">
+                                <option value="">{{ __('-- selecciona producto --') }}</option>
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">
+                                        {{ $product->name }} ({{ number_format($product->pricesell * 1.1, 2) }}€)
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="quantity[]" min="1" value="1" inputmode="numeric" class="input-tw">
+                        </td>
+                        <td class="text-right">
+                            <button type="button" class="btn-secondary remove-offer-row text-xs">{{ __('Quitar') }}</button>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<button type="button" id="add-offer-row" class="btn btn-tab">+ Añadir producto</button>
+<button type="button" id="add-offer-row" class="btn-secondary mt-3">+ {{ __('Añadir producto') }}</button>
 
 @isset($productsSubtotal)
-    <p class="mt-3">
-        <b>Suma de productos (PVP):</b> {{ number_format($productsSubtotal, 2) }}€<br>
-        <b>Precio final oferta:</b> {{ number_format((float) $offer->final_price, 2) }}€<br>
-        <b>Descuento aplicado:</b>
-        {{ number_format($productsSubtotal - (float) $offer->final_price, 2) }}€
-    </p>
+    <dl class="mt-4 grid gap-1 text-sm sm:grid-cols-3">
+        <div>
+            <dt class="text-slate-500">{{ __('Suma de productos (PVP)') }}</dt>
+            <dd class="font-semibold text-slate-900">{{ number_format($productsSubtotal, 2) }}€</dd>
+        </div>
+        <div>
+            <dt class="text-slate-500">{{ __('Precio final oferta') }}</dt>
+            <dd class="font-semibold text-slate-900">{{ number_format((float) $offer->final_price, 2) }}€</dd>
+        </div>
+        <div>
+            <dt class="text-slate-500">{{ __('Descuento aplicado') }}</dt>
+            <dd class="font-semibold text-slate-900">{{ number_format($productsSubtotal - (float) $offer->final_price, 2) }}€</dd>
+        </div>
+    </dl>
 @endisset
 
-<div class="text-center mt-3">
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="{{ route('offers.index') }}" class="btn btn-tab">Cancelar</a>
+<div class="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+    <a href="{{ route('offers.index') }}" class="btn-secondary no-underline">{{ __('Cancelar') }}</a>
+    <button type="submit" class="btn-primary">{{ __('Guardar') }}</button>
 </div>
 
 {{-- Add/remove row behavior is wired up in resources/js/admin/offer-edit.js --}}

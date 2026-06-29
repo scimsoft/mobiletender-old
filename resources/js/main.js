@@ -26,3 +26,4 @@ import './admin/stock.js';
 import './admin/receipt-index.js';
 import './admin/basket.js';
 import './admin/timereport.js';
+import './admin/offer-edit.js';

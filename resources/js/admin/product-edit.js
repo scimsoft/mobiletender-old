@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import 'bootstrap/dist/js/bootstrap.bundle.js';
 
 function addOnProduct(productId, addOnProductID, price) {
     $.ajax({
@@ -60,7 +59,6 @@ $(function () {
 
     $('.toggleAlergen').on('click', function () {
         const alergid = this.id;
-        const opacity = this.style;
         $.ajax({
             url: '/product/alergen',
             type: 'POST',
@@ -68,14 +66,8 @@ $(function () {
             dataType: 'json',
             success: function () {},
         });
-        if (opacity.opacity === '1') {
-            opacity.opacity = '0.3';
-        } else {
-            opacity.opacity = '1';
-        }
+        // Toggle "active" visual state. We use opacity so the SVG/PNG icons stay readable.
+        this.classList.toggle('opacity-30');
+        this.setAttribute('aria-pressed', this.classList.contains('opacity-30') ? 'false' : 'true');
     });
-
-    if (typeof $().popover === 'function') {
-        $('[data-toggle="popover"]').popover();
-    }
 });

@@ -1,7 +1,7 @@
 /**
  * Offer create/edit page: add/remove product rows in the offer's
  * "virtual table". Pure DOM, no jQuery, safe to import on every page
- * served from layouts.reg (it no-ops if the table is not present).
+ * served from layouts.admin (it no-ops if the table is not present).
  */
 
 function initOfferEdit() {

@@ -30,12 +30,11 @@ npm ci && npm run build   # Vite → public/build
 
 **Stack:** Laravel **9.x** (upgrade path to 10/11 documented in the modernization plan). Assets built with **Vite** + `vite-plugin-pwa` (replaces Laravel Mix / Workbox).
 
-### Frontend bundles
+### Frontend bundle
 
-- **`resources/js/app.js` + `resources/sass/app.scss`** — Bootstrap 4 bundle for **marketing** pages (`layouts.web`) and legacy `layouts.app` if still referenced.
-- **`resources/js/main.js` + `resources/css/main.css`** — **Tailwind CSS 3** + Alpine for the **admin** shell (`layouts.admin`), **shop / order** flow (`layouts.shop`), and **auth** (`layouts.auth`). Order pages load Bootstrap 4 **CSS** from CDN alongside Tailwind so existing modals/tables keep working; behavior JS comes from this bundle (jQuery + Bootstrap bundle for modals).
+- **`resources/js/main.js` + `resources/css/main.css`** — **Tailwind CSS 3** + Alpine + jQuery (used by the AJAX helpers in `resources/js/shop/*` and `resources/js/admin/*`). One bundle covers the **admin** shell (`layouts.admin`), **shop / order** flow (`layouts.shop`), and **auth** (`layouts.auth`). The app is mobile-first and Bootstrap-free.
 
-Run `npm run build` to compile both entrypoints into `public/build/`.
+Run `npm run build` to compile into `public/build/`.
 
 ## Importing a production database dump
 

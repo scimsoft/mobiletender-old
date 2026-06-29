@@ -8,9 +8,32 @@
     display: none !important;
 }
 
+@layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+    }
+    body {
+        @apply font-sans text-slate-800;
+    }
+    /* Prevent iOS Safari from zooming in on text inputs (which jumps the layout). */
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+    @media (min-width: 640px) {
+        input,
+        select,
+        textarea {
+            font-size: 14px;
+        }
+    }
+}
+
 @layer components {
     .btn {
-        @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:opacity-50;
+        @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:opacity-50 sm:min-h-[2.25rem] sm:py-2;
     }
     .btn-primary {
         @apply btn bg-brand text-slate-900 shadow hover:bg-brand-dark;
@@ -21,8 +44,11 @@
     .btn-danger {
         @apply btn bg-red-600 text-white hover:bg-red-700;
     }
+    .btn-ghost {
+        @apply btn text-slate-700 hover:bg-slate-100;
+    }
     .btn-tab {
-        @apply inline-flex cursor-pointer items-center rounded border border-amber-100 bg-gradient-to-b from-amber-50 to-white px-3 py-1.5 text-sm text-slate-800 shadow-sm hover:from-amber-100 hover:to-amber-50;
+        @apply inline-flex min-h-[2.5rem] cursor-pointer items-center rounded border border-amber-100 bg-gradient-to-b from-amber-50 to-white px-3 py-1.5 text-sm text-slate-800 shadow-sm hover:from-amber-100 hover:to-amber-50;
     }
     .btn-pay {
         @apply btn w-full bg-brand px-4 py-3 text-base font-semibold text-slate-900 shadow hover:bg-brand-dark sm:max-w-md;
@@ -30,17 +56,14 @@
     .btn-mobilepos {
         @apply rounded border border-amber-600 bg-amber-200 px-3 py-2 text-slate-900 hover:bg-amber-300;
     }
+    .btn-normal {
+        @apply rounded border border-orange-300 bg-amber-200 px-3 py-2 text-slate-900 hover:bg-orange-300;
+    }
     .chip {
         @apply shrink-0 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm text-slate-700 transition hover:bg-slate-50;
     }
     .chip-active {
         @apply border-amber-500 bg-amber-100 text-amber-950 shadow-sm;
-    }
-    .card-tw-product {
-        @apply transition hover:border-slate-300 hover:shadow-md;
-    }
-    .btn-normal {
-        @apply rounded border border-orange-300 bg-amber-200 px-3 py-2 text-slate-900 hover:bg-orange-300;
     }
     .card-tw {
         @apply overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm;
@@ -51,11 +74,56 @@
     .card-tw-body {
         @apply p-4;
     }
+    .card-tw-product {
+        @apply transition hover:border-slate-300 hover:shadow-md;
+    }
     .input-tw {
         @apply block w-full rounded-lg border-slate-300 shadow-sm focus:border-brand focus:ring-brand sm:text-sm;
     }
     .label-tw {
         @apply mb-1 block text-sm font-medium text-slate-700;
+    }
+    .alert-tw {
+        @apply mb-4 rounded-lg border px-4 py-3 text-sm;
+    }
+    .alert-success {
+        @apply alert-tw border-green-200 bg-green-50 text-green-800;
+    }
+    .alert-error {
+        @apply alert-tw border-red-200 bg-red-50 text-red-800;
+    }
+    .alert-info {
+        @apply alert-tw border-blue-200 bg-blue-50 text-blue-800;
+    }
+    .alert-warning {
+        @apply alert-tw border-amber-200 bg-amber-50 text-amber-800;
+    }
+    .badge-tw {
+        @apply inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700;
+    }
+    .badge-info {
+        @apply badge-tw bg-blue-50 text-blue-700;
+    }
+    .badge-success {
+        @apply badge-tw bg-green-50 text-green-700;
+    }
+    .badge-warning {
+        @apply badge-tw bg-amber-50 text-amber-700;
+    }
+    .table-tw {
+        @apply w-full divide-y divide-slate-200 text-left text-sm;
+    }
+    .table-tw thead {
+        @apply bg-slate-50 text-xs uppercase tracking-wide text-slate-500;
+    }
+    .table-tw th {
+        @apply px-3 py-2 font-semibold;
+    }
+    .table-tw tbody {
+        @apply divide-y divide-slate-100;
+    }
+    .table-tw td {
+        @apply px-3 py-2 align-middle;
     }
     .overlay {
         @apply fixed inset-0 z-[5000] flex flex-col items-center justify-center bg-white/50 text-center;

@@ -1,164 +1,93 @@
 @extends('layouts.shop')
 
-@section('title', __('Checkout') . ' — ' . config('app.name'))
+@section('title', __('Pagar') . ' — ' . config('app.name'))
 
 @section('page', 'checkout')
 
+@php
+    $checkoutPageConfig = [
+        'ticketId' => Session::get('ticketID'),
+        'newLinesTotal' => round((float) $newLinesPrice * 1.1, 2),
+        'paypalPrepay' => (bool) (config('customoptions.eatin_prepay') || config('customoptions.takeaway_prepay') || config('customoptions.delivery_prepay')),
+        'paypalClientId' => config('paypal.client_id'),
+        'hasTableNumber' => (bool) Session::get('tableNumber'),
+    ];
+    $hasTable = (bool) Session::get('tableNumber');
+    $hasNewLines = $newLinesPrice > 0;
+@endphp
+
 @section('content')
-    @php
-        $checkoutPageConfig = [
-            'ticketId' => Session::get('ticketID'),
-            'newLinesTotal' => round((float) $newLinesPrice * 1.1, 2),
-            'paypalPrepay' => (bool) (config('customoptions.eatin_prepay') || config('customoptions.takeaway_prepay') || config('customoptions.delivery_prepay')),
-            'paypalClientId' => config('paypal.client_id'),
-            'hasTableNumber' => (bool) Session::get('tableNumber'),
-        ];
-    @endphp
-    <div class="card-tw mx-auto max-w-3xl">
-        <div class="card-tw-header text-center">
-            <b>{{ __('Pedido') }}</b>
+    <div class="mx-auto max-w-2xl space-y-4">
+        <h1 class="text-xl font-semibold text-slate-900">{{ __('Pagar') }}</h1>
+
+        <section class="card-tw" aria-label="{{ __('Resumen') }}">
+            <div class="card-tw-header text-sm font-semibold uppercase tracking-wide text-slate-500">{{ __('Resumen') }}</div>
+            <dl class="divide-y divide-slate-100 text-sm">
+                <div class="grid grid-cols-3 gap-2 px-4 py-3">
+                    <dt class="text-slate-500">{{ __('Base') }}</dt>
+                    <dd class="text-right tabular-nums">@money($totalBasketPrice)</dd>
+                    <dd class="text-right tabular-nums text-slate-500">{{ __('IVA') }} @money($totalBasketPrice * 0.1)</dd>
+                </div>
+                <div class="flex items-baseline justify-between gap-2 bg-slate-50 px-4 py-3">
+                    <dt class="text-base font-semibold text-slate-900">{{ __('TOTAL') }}</dt>
+                    <dd class="text-2xl font-bold tabular-nums text-slate-900">@money($totalBasketPrice * 1.1)</dd>
+                </div>
+                @if ($hasNewLines)
+                    <div class="flex items-baseline justify-between gap-2 px-4 py-3">
+                        <dt class="text-sm font-medium text-slate-700">{{ __('A Pedir') }}</dt>
+                        <dd class="text-base font-semibold tabular-nums text-slate-900">@money($newLinesPrice * 1.1)</dd>
+                    </div>
+                @endif
+            </dl>
+        </section>
+
+        <section class="card-tw" aria-label="{{ __('Forma de pago') }}">
+            <div class="card-tw-header text-sm font-semibold uppercase tracking-wide text-slate-500">{{ __('Forma de pago') }}</div>
+            <div class="space-y-3 p-4">
+                @if ($hasTable)
+                    @if (config('customoptions.clean_table_after_order'))
+                        <button type="button" class="btn-primary w-full" id="pagarEfectivo">{{ __('Pagar en efectivo') }}</button>
+                        <button type="button" class="btn-primary w-full" id="pagarTarjeta">{{ __('Pagar con tarjeta') }}</button>
+                        <button type="button" class="btn-primary w-full" id="pagarOnline">{{ __('Pagar online') }}</button>
+                    @else
+                        <button type="button" class="btn-primary w-full" id="apuntarEnLaMesa">{{ __('Pedir') }}</button>
+                    @endif
+                @else
+                    <button type="button" class="btn-mobilepos w-full" id="eatin">{{ __('Para tomarlo aqui') }}</button>
+                    @if (config('customoptions.takeaway'))
+                        <button type="button" class="btn-mobilepos w-full" id="takeaway">{{ __('Para recoger') }}</button>
+                    @endif
+                    @if (config('customoptions.delivery'))
+                        <a href="" class="btn-mobilepos block w-full text-center no-underline">{{ __('Para entregar') }}</a>
+                    @endif
+                @endif
+
+                <div id="applepay-container" class="empty:hidden"></div>
+                <div id="googlepay-container" class="empty:hidden"></div>
+
+                <details class="group rounded-lg border border-slate-200 bg-white">
+                    <summary class="cursor-pointer select-none px-4 py-3 text-sm font-medium text-slate-700 marker:hidden">
+                        {{ __('Otras formas de pagar') }}
+                    </summary>
+                    <div class="px-4 pb-4 pt-2">
+                        <div id="paypal-button-container"></div>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <div id="scan-qr-instructions" class="card-tw hidden">
+            <div class="space-y-3 p-4 text-center">
+                <p class="text-sm text-slate-700">{{ __('Para añadir el pedido a su mesa, escanea con la cámara el código QR que tiene en su mesa.') }}</p>
+                <img src="/img/qr-example.png" class="mx-auto max-w-[12rem]" alt="">
+            </div>
         </div>
-        <div class="card-tw-body text-center">
-                    <table id="products-table" class="table ">
-                        <thead>
 
-
-                        </thead>
-                        <tbody>
-
-                        <tr>
-                            <td colspan="5">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td colspan="">&nbsp;</td>
-                            <td colspan="">Base</td>
-                            <td colspan="">IVA</td>
-                            <td colspan=""></td>
-                            <td colspan="">Total</td>
-                        </tr>
-                        <tr>
-                            <td colspan="">TOTAL</td>
-                            <td>@money($totalBasketPrice)</td>
-                            <td>@money($totalBasketPrice*0.1)</td>
-
-                            <td></td>
-                            <td>@money($totalBasketPrice*1.1)</td>
-                        </tr>
-                        <tr>
-                            <td colspan=""><b>A Pedir</b></td>
-                            <td>@money($newLinesPrice)</td>
-                            <td>@money($newLinesPrice*0.1)</td>
-
-                            <td></td>
-                            <td>&nbsp;<b>@money($newLinesPrice*1.1)</b></td>
-
-
-                        </tr>
-
-                        <tr>
-                            <td colspan="5">&nbsp;</td>
-                        </tr>
-                        {{--
-                        Si tiene numero de mesa puede ser:
-                        1. de prepago
-                        2. a cuenta
-                        --}}
-
-
-                        @if(Session::get('tableNumber'))
-                            @if(config('customoptions.clean_table_after_order'))
-                            <tr>
-                                <td colspan="5">
-                                    <button class="btn btn-tab btn-block" id="pagarEfectivo">
-                                      Pagar en efectivo
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5">
-                                    <button class="btn btn-tab btn-block" id="pagarTarjeta">
-                                        Pagar con tarjeta
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5">
-                                    <button class="btn btn-tab btn-block" id="pagarOnline">
-                                        Pagar online
-                                    </button>
-                                </td>
-                            </tr>
-                        @else
-                            <tr>
-                                <td colspan="5">
-                                    <button class="btn btn-tab btn-block" id="apuntarEnLaMesa">
-                                        Pedir
-                                    </button>
-                                </td>
-                            </tr>
-                            @endif
-
-                        @else
-                            {{--
-                        Si NO tiene numero de mesa puede ser:
-                        1. Para tomar en el restaurante
-                        2. para llevar
-                        3. O para domicilars
-                        --}}
-
-                            <tr>
-                                <td colspan="5"><button class="btn btn-mobilepos btn-block" id="eatin">Para tomarlo aqui</button></td>
-                            </tr>
-
-                            @if(config('customoptions.takeaway'))
-                                <tr>
-                                    <td colspan="5"><button class="btn btn-mobilepos btn-block" id="takeaway">Para recoger</button></td>
-                                </tr>
-                            @endif
-                            @if(config('customoptions.delivery'))
-                                <tr>
-                                    <td colspan="5"><a href="" class="btn btn-mobilepos btn-block">Para entregar </a></td>
-                                </tr>
-                            @endif
-                        @endif
-
-                        </tbody>
-                    </table>
-
-
-                    <div class="mx-auto max-w-sm space-y-3 pt-2 text-left">
-                        <div id="applepay-container" class="empty:hidden"></div>
-                        <div id="googlepay-container" class="empty:hidden"></div>
-                        <details class="group rounded-lg border border-slate-200 bg-white">
-                            <summary class="cursor-pointer select-none px-4 py-3 text-sm font-medium text-slate-700 marker:hidden">
-                                {{ __('Otras formas de pagar') }}
-                            </summary>
-                            <div class="px-4 pb-4 pt-2">
-                                <div id="paypal-button-container"></div>
-                            </div>
-                        </details>
-                    </div>
-                    <div id="scan-qr-instructions" style="display:none">
-                        <tr>
-                            <td colspan="5">
-                                Para añadir el pedido a su mesa, <br>
-                                escanea con la camera el codgo QR <br>
-                                que tiene en su mesa.<br>
-                                <img src="/img/qr-example.png" class="flex-column">
-                            </td>
-                        </tr>
-                    </div>
-                        <div id="div-takeaway" style="display:none">
-                            <tr>
-                                <td colspan="5">
-                                    Horario de recogido:<br>
-                                    12:00 hasta las 20:00
-
-
-                                </td>
-                            </tr>
-                        </div>
-
+        <div id="div-takeaway" class="card-tw hidden">
+            <div class="p-4 text-center text-sm text-slate-700">
+                <p class="font-medium">{{ __('Horario de recogido') }}</p>
+                <p class="tabular-nums">12:00 — 20:00</p>
+            </div>
         </div>
     </div>
 @endsection

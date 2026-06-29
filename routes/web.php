@@ -18,7 +18,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 
 use App\Http\Controllers\TimeReportController;
-use App\Http\Controllers\Web\WebController;
 use App\Models\TimeReport;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,15 +33,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "Web" middleware group. Now create something great!
 |
 */
-
-//Route::get('/web', [WebController::class, 'web']);
-//Route::get('/web/products', [WebController::class, 'products']);
-//Route::get('/web/products/simple', [WebController::class, 'simple']);
-//Route::get('/web/products/standard', [WebController::class, 'standard']);
-//Route::get('/web/products/premium', [WebController::class, 'premium']);
-//Route::get('/web/prices', [WebController::class, 'prices']);
-//Route::get('/web/subscription', [WebController::class, 'subscription']);
-//Route::get('/web/products/printer', [WebController::class, 'printer']);
 
 Auth::routes();
 Route::group(['middleware' => ['web']], function () {
